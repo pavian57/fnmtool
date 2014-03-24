@@ -1,0 +1,18 @@
+ %to    :    The full name of the person that the the original message
+             was addressed to.
+ %fto   :    As %to, but only the first name of that person.
+ %from  :    The full name of the person who wrote the original
+             message.
+ %ffrom :    As %from, but only the first name of that person.
+ %subj  :    Subject of the original message.
+ %orig  :    Address of the sender of the message (like 2:281/527)
+ %dest  :    Address of the recipient of the message (like 2:281/527)
+ %time  :    Time the message was written (like 01:25)
+ %year  :    The year the message was written (like 1993)
+ %mon   :    The month the message was written (like jan, feb etc)
+ %day   :    The day of the month msg was written (a number)
+ %dow   :    The 'day of week' msg was written (like mon, tue, wed etc)
+
+
+(original message follows)
+--------------------------

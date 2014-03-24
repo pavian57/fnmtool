@@ -1,0 +1,12 @@
+Currently implemented actions
+-----------------------------
+copy
+move
+file
+hdrfile
+bounce (temporary unavailable)
+packmail
+movemail
+rewrite
+semaphore
+display

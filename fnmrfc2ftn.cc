@@ -1,0 +1,98 @@
+#include <string>
+#include <iostream>
+#include <istream>
+#include <ostream>
+#include <iterator>
+#include <fstream>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream>
+
+#include "config.h"
+#include "log.h"
+#include "global.h"
+#include "rfcmail.h"
+#include "rfc2ftnversion.h"
+
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+
+  string sender, recipient, prgname, logstr ;
+  CRfcmail rfcmail;
+  
+  prgname = argv[0];
+  sender = argv[1];
+  recipient = argv[2];
+
+  
+  cfg = new CConfig;
+	log = new CLog(cfg->s_Log);
+	log->intro(prgname);
+	
+	ofstream myfile;
+  if (cfg->debug) {  
+    char *tmpname = strdup("/tmp/tmpfileXXXXXX");
+    mkstemp(tmpname);
+
+    myfile.open(tmpname); // ("/tmp/example.txt");
+  }
+
+	
+	
+	
+	int rc = initApi();
+	
+  stringstream rcode ;//create a stringstream
+  rcode << rc ;
+	logstr="initApi returned=";
+	logstr += rcode.str();
+  log->add(2,logstr);
+
+	if (rc==0) {
+    
+
+// don't skip the whitespace while reading
+  cin >> noskipws;
+
+// use stream iterators to copy the stream to a string
+  istream_iterator<char> it(cin);
+  istream_iterator<char> end;
+  string results(it, end);
+  
+  if (cfg->debug) {
+    myfile << sender << endl;
+    myfile << recipient << endl;
+    myfile << basename(prgname.c_str()) << endl;
+    myfile << results;
+  }
+  rc = rfcmail.parse(sender,recipient,results);
+//  cout << rc << endl;
+  rcode.str("");
+  rcode << rc ;
+	logstr="parse mail returned=";
+	logstr += rcode.str();
+  log->add(2,logstr);
+  if (rc==0) {
+    rc = rfcmail.sendmail();
+     rcode.str("");
+  rcode << rc ;
+	logstr="send mail returned=";
+	logstr += rcode.str();
+  log->add(2,logstr);
+  } else {
+  }
+  closeApi();
+  }
+  
+	log->add(9, "finishing");
+	log->outro();
+  delete log;
+  delete cfg;
+  if (cfg->debug) {  
+    myfile.close();
+  }
+  
+}

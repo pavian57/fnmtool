@@ -1,0 +1,10 @@
+how to install lxtrack
+======================
+
+1. lxtrack requires the SMAPI to access fido messagebases
+2. copy the source into the same directory tree as smapi:
+		
+	/usr/src/packages/ 	-> smapi/
+				-> lxtrack/
+3a. if you want to have a debug release, do a make debug
+3b. otherwise a make release

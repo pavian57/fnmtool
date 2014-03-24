@@ -1,0 +1,6 @@
+- bounce won't work
+- crashes when unable to open log file
+- crashes when not able to open area (FIXED)
+- goes into infinite loop when packmail statement incomplete (FIXED)
+- crashes when more than one scandir defined (don't ask me why)
+	=> is in CArea::Scan() somehow when scanning 2nd scandir the msgnum is not increased (FIXED)

@@ -1,0 +1,34 @@
+				LxTrack
+			-----------------------
+
+
+
+  I. Introduction
+ II. Config file
+III. Portability Issues
+     1. Header files	 
+
+I. Introduction
+===============
+
+Lxtrack was designed to be a fully compatible NetMgr-Clone for Linux. The current
+version is somewhere around -0.1 ;) 
+Lxtrack do not supported after 2005 year.
+
+II. Config file
+===============
+
+Lxtrack uses the same config-format as Netmgr. Refer to Netmgr documentation for
+details.
+
+III. Portability Issues
+=======================
+
+The code is written almost exclusively using ANSI C++, so it shouldn't be too
+hard to port it to any system which has a C++ compiler conforming to ANSI.
+
+III.1 Header Files
+==================
+
+If you are using a compiler that has iostream.h instead of iostream defin
+ IS_OLDGCC in the Makefile, and it should run.
