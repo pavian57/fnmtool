@@ -39,8 +39,6 @@ class CRfcmail
                 HAREA 	Area;
                 		
                 string s_Subject;
-                string s_Charset;
-                string s_CHRS;
                            
                 string s_Message;
                 string s_Ctrl;

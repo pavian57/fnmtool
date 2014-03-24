@@ -16,7 +16,7 @@
 #include "config.h"
 #include "global.h"
 #include "rfcmail.h"
-
+#include "iconvpp.h"
 
 using namespace std;
 
@@ -27,8 +27,6 @@ CRfcmail::CRfcmail()
          r_To = "";
          s_From = "";
          s_To = "";
-         s_Charset = "UTF8";
-         s_CHRS = "ISO-8859-1";
          s_Subject="no Subject found";
          s_Message = "";
          s_Ctrl = "";
@@ -128,17 +126,6 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
     line.clear();
   } 
 
-//Content-Type: text/plain; charset=UTF-8;
-  pos = rawMail.find("charset=");
-  if (pos != -1) {
-    line = rawMail.substr(pos);
-    pos = line.find("=");
-    index = line.find(";",pos);
-    s_Charset.assign(line,pos+1,index-pos-1);
-    line.clear();
-  } 
-
-
   istringstream f(rawMail);
   int inmsg = 0;
   while (getline(f, line)) {
@@ -197,7 +184,7 @@ int CRfcmail::sendmail()
     string s_Kludges;
     /* write fmpt, topt, intl info */
     char *buf;
-    buf = new char[50];
+    buf = new char[200];
 
     sprintf(buf, "\001INTL %i:%i/%i %i:%i/%i",
             DestMsg.F_To.zone, DestMsg.F_To.net, DestMsg.F_To.node,
@@ -225,13 +212,21 @@ int CRfcmail::sendmail()
 
     sprintf(buf,"\001PID: %s %s",RFC2FTN,RFC2FTNVERSION);
     s_Kludges+=buf;
-
+    sprintf(buf,"\001CHRS: %s",cfg->s_CharsetFtn.c_str());
+    s_Kludges+=buf;    
+    
     
     DestMsg.s_Ctrl += s_Kludges;
     DestMsg.s_Ctrl += s_Ctrl;    
     delete [] buf;
   
-    DestMsg.s_MsgText= s_Message;
+    string outmsg;
+   
+    converter conv(cfg->s_CharsetFtn,cfg->s_CharsetRfc);
+    conv.convert(s_Message,outmsg);  
+    
+    DestMsg.s_MsgText = outmsg; 
+    
     DestMsg.sent=true;
     DestMsg.Write();
     string logstr="Message written to Area " + cfg->s_Netmail;
