@@ -20,6 +20,7 @@ class CLog
 	    int intro(string s_Prg);
 	    int outro();
 	    bool noclose;
+	    bool logopen;
 	protected:
 	    FILE *f_log;
 	    time_t tm;
