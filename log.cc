@@ -59,17 +59,20 @@ int CLog::outro()
 CLog::CLog()
 {
   logopen = 0;
-	f_log=fopen("/var/log/netmgrlx.log", "a");
+	f_log=fopen("/var/log/fnmtool.log", "a");
+
 	if (f_log == NULL) {
-	  cerr << "Open Log /var/log/netmgrlx.log failed, trying alternative log in /tmp/" << endl;
-    f_log=fopen("/tmp/netgmrlx.log","a");
+	  cerr << "Open Log /var/log/fnmtool.log failed, trying alternative log in /tmp/" << endl;
+    f_log=fopen("/tmp/fnmtool.log","a");
     if (f_log != NULL) {
-      cerr << "Open Log /tmp/netgmrlx.log succesfull" << endl;
+      cerr << "Open Log /tmp/fnmtool.log succesfull" << endl;
       logopen = 1;     
     } else {
-      cerr << "Open Log /tmp/netgmrlx.log failed, logging to stderr" << endl;
+      cerr << "Open Log /tmp/fnmtool.log failed, logging to stderr" << endl;
     }
-	} 
+	} else {
+    logopen = 1;	        
+	}  
 }
 
 CLog::CLog(string s_File)
@@ -81,11 +84,13 @@ CLog::CLog(string s_File)
 	  cerr << "Open Log " << newlogfile << " failed, trying alternative log in /tmp/" << endl;
     f_log=fopen(newlogfile.c_str(),"a");
     if (f_log != NULL) {
-      cerr << "Open Log /tmp/netgmrlx.log succesfull" << endl;    
+      cerr << "Open Log " <<  newlogfile << " succesfull" << endl;    
       logopen = 1;     
     } else {
-      cerr << "Open Log /tmp/netgmrlx.log failed, logging to stderr" << endl;
+      cerr << "Open Log " <<  newlogfile << " failed, loggin to stderr" << endl;         
     }
+	} else {
+    logopen = 1;	        
 	} 
 }
 
