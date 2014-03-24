@@ -121,7 +121,9 @@ CConfig::CConfig()
 	string s_Token;
 	
 	int scn=-1, msk=-1, actn=-1, rfcfido=-1;
-	
+  s_CharsetFtn = "LATIIN1";
+  s_CharsetRfc = "UTF-8";
+        	
 	openConfig(CONFIGDIR);
 	while ((s_Line=getLine())!="\n") 
 	{
@@ -150,6 +152,14 @@ CConfig::CConfig()
 		{
 			s_Log=parm.s_RestOfLine;
 		}
+		else if (parm.s_Token=="ftncharset")
+		{
+      s_CharsetFtn =parm.s_RestOfLine;
+		}
+		else if (parm.s_Token=="rfccharset")
+		{
+      s_CharsetRfc = parm.s_RestOfLine;
+		}		
 		else if (parm.s_Token=="outbound")
 		{
 			s_Outbound=parm.s_RestOfLine;

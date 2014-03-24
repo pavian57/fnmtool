@@ -26,6 +26,7 @@ CMsg::CMsg()
 	s_From="";
 	s_To="";
 	s_Subject="";
+	s_Charset="";
 	F_From="0:0/0.0";
 	F_To="0:0/0.0";
 	d_Attr=0;
@@ -40,8 +41,9 @@ CMsg::CMsg(int i_num)
 
 int CMsg::Open(int i_num, HAREA area)
 {
-	
 	char *buf1, *buf2;
+	string charset;
+	int pos;
 	hmsg = MsgOpenMsg(area, MOPEN_RW, i_num);
 	if (hmsg==NULL) 
 	{
@@ -56,6 +58,23 @@ int CMsg::Open(int i_num, HAREA area)
 	MsgReadMsg(hmsg, &xmsg, 0, i_TextLen, (unsigned char *) buf2, i_CtrlLen, (unsigned char *)buf1);
 	s_MsgText=buf2;
 	s_Ctrl=buf1;
+	s_Charset="IBM437";
+	charset = s_Ctrl;
+	
+	pos = charset.find("CHRS: ");
+	if (pos != -1) {
+	  charset.erase(0,pos+6);
+	  pos = charset.find(" ");
+	  if (pos != -1)
+  	  charset.erase(pos,-1);
+	} else {
+	  s_Charset = "LATIN1";
+ 	}
+ 	s_Charset = charset;
+  pos = s_Charset.find("IBMPC");	
+	if (pos > -1) s_Charset = "IBM437";
+  pos = s_Charset.find("LATIN-1");
+  if (pos > -1) s_Charset = "LATIN1";
 	s_From=(char *)xmsg.from;
 	s_To=(char *)xmsg.to;
 	s_Subject=(char *)xmsg.subj;

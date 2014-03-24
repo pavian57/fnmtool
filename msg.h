@@ -12,6 +12,7 @@ class CMsg
 		string s_From;
 		string s_To;
 		string s_Subject;
+		string s_Charset;
 		CFtnAddr F_From;
 		CFtnAddr F_To;
 		dword d_Attr;

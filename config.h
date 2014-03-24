@@ -36,6 +36,8 @@ class CConfig
 		string s_Outbound;
 		string s_Inbound;
 		string s_Log;
+		string s_CharsetFtn;
+		string s_CharsetRfc;
 		vector<CScandir> S_Scandir;
 		vector<COperation> O_Op;
 		vector<CAction> A_Action;

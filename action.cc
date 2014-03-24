@@ -27,6 +27,8 @@ extern "C"
 #include "pkt.h"
 #include "global.h"
 #include "msgid.h"
+#include "iconvpp.h"
+
 using namespace std;
 
 
@@ -547,20 +549,46 @@ int CEmailAction::run()
     mailto=temp;
     char *buf;
     Message.Open(msgnum, Area);
-    buf = new char[Message.s_MsgText.length()+200]();
+    buf = new char[Message.s_MsgText.length()+400]();
     sprintf(buf,"From: %s",Message.s_From.c_str());
     sprintf(buf+strlen(buf), ", %i:%i/%i.%i\n", Message.F_From.zone, Message.F_From.net, Message.F_From.node, Message.F_From.point);
     sprintf(buf+strlen(buf),"To  : %s",Message.s_To.c_str());
     sprintf(buf+strlen(buf),", %i:%i/%i.%i\n", Message.F_To.zone, Message.F_To.net, Message.F_To.node, Message.F_To.point);
     sprintf(buf+strlen(buf),"Subject: %s\n",Message.s_Subject.c_str());
     sprintf(buf+strlen(buf),"---------------------\n");
+
+/*    char* token         = NULL;
+    char  delims[]      = "\1";
+    string ctrlline;
+    // During the first read, establish the char string and get the first token.
+    char *dup = strdup(Message.s_Ctrl.c_str());
+    token = strtok(dup,"\1");
+    // While there are any tokens left in "char_line"...
+    while (token != NULL)
+    {
+// seperate controllines
+        ctrlline = "@";
+        ctrlline += token;
+//write ctrl to buf
+        sprintf(buf+strlen(buf),"%s\n",ctrlline.c_str());
+        token = strtok(NULL, delims);
+    }
+    free(dup); */
+    
+    converter conv(cfg->s_CharsetRfc, Message.s_Charset);
+    if (cfg->debug) cerr  << "Message.s_Charset=" << Message.s_Charset << endl;
+
     if (cfg->debug) cerr  << "Message.s_MsgText.length()=" << Message.s_MsgText.length() << endl;
     for (unsigned int i=0; i<Message.s_MsgText.length(); i++)
     {
         if (Message.s_MsgText[i]=='\r') Message.s_MsgText[i]='\n';
         if (Message.s_MsgText[i]=='\1') Message.s_MsgText[i]='@';
     }
-    sprintf(buf+strlen(buf),"%s",Message.s_MsgText.c_str());
+    
+    string outmsg;
+    conv.convert(Message.s_MsgText,outmsg);  
+    
+    sprintf(buf+strlen(buf),"%s",outmsg.c_str());  //Message.s_MsgText.c_str());
 
     if (cfg->debug) cerr  << Message.s_MsgText << endl;
     Message.read = true;
