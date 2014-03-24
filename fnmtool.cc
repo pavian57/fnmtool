@@ -18,11 +18,23 @@
 #include "global.h"
 #include "version.h"
 
+void printhelp()
+{
+  cerr << PRGNAME << " " << VERSION << endl << endl;
+  cerr << "Usage: fnmtool [options]" << endl;
+  cerr << "fnmtool -s           -- run silent" << endl;
+  cerr << "fnmtool -d           -- with debug output" << endl;
+  cerr << "fnmtool -h -? --help -- this screen" << endl << endl;  
+  exit(1);
+}
+
 int main(int argc, char** argv)
 {
 	int result = 0;
 	cfg = new CConfig;
 	for (int i = 1; i < argc; i++) {
+	  if (strcmp(argv[1],"-h")==0 || strcmp(argv[1],"-?")==0 || strcmp(argv[1],"--help")==0)
+     printhelp();
     if (strcmp(argv[i],"-s")==0)
     	cfg->silent = 1;
     if (strcmp(argv[i],"-d")==0)
