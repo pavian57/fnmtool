@@ -91,7 +91,6 @@ int CArea::Open()
     else
     {
         a_Area=NULL;
-        cerr << "Could not open area:" << s_Path << "!\n";
         return -1;
     }
 }
@@ -105,7 +104,6 @@ int CArea::Close()
     }
     else
     {
-        cerr << "Area not open!\n";
         return -1;
     }
 }
@@ -138,9 +136,6 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
         for (unsigned int j=start; j<stop+1 && !stopwithmsg; j++)
         {
             actualMask=Message.GetMask();
-
-//	  cerr << "Msgnum=" << Message.s_To  << ": MSGREAD=" << (Message.d_Attr & MSGREAD) << ": MSGLOCAL=" << (Message.d_Attr & MSGLOCAL) << ": MSGRRQ=" << (Message.d_Attr & MSGRRQ) << endl;
-
 
             /*------------ scan for matching mask ---------------*/
             if (M_ScanFor[j].M_Mask==actualMask)

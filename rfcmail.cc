@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sstream>
 #include <algorithm>
+#include <iomanip>
 
 #include "area.h"
 #include "msg.h"
@@ -38,12 +39,15 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
 
   string line, tmp;
   string zone, net, node, point, ftnaddr;
-  int pos, index;
-
+  int pos, index, mydbg = 0; //mydbg special debug, reading from stdin, when running offline
+  ostringstream osl;
+  
+if (mydbg == 1) cerr << "recipient->" << recipient << ":" << endl; 
   pos = recipient.find("@");
   if (pos > 0) {
     s_To.assign(recipient,0,pos);
     line = recipient.substr(pos+1);
+if (mydbg == 1) cerr << "@ line->" << line << ":" << endl;
   } else return 1; //no at found, not valid rfc address
   replace( s_To.begin(), s_To.end(), '_', ' ');
   capitalize(s_To);  // nice name
@@ -52,6 +56,7 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
   if ((pos = line.find(".fidonet")) != -1) {
     index = line.length()-pos;
     line.erase(pos,index);
+if (mydbg == 1) cerr << "fidonet line->" << line << ":" << endl;    
   } else if ((pos = line.find(".z")) != -1) {
     if ((pos = line.find(".",pos+1)) != -1) {
       index = line.length()-pos;
@@ -60,6 +65,7 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
   }
   
 // rkn@p99.f520.n301.z2.fidonet
+if (mydbg == 1) cerr << "p line->" << line << ":" << endl;    
   index = 0;
   point = "0";
   pos = line.find("p");
@@ -76,7 +82,7 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
       index = ++pos;
     }
   }
-
+if (mydbg == 1) cerr << "f line->" << line << ":" << endl;    
   pos = line.find(".f"); // extract node
   if (pos != -1) {
     line.erase(pos,1);
@@ -92,7 +98,8 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
     } else return 2;
   } else return 2;  
 
-  
+
+if (mydbg == 1) cerr << "n line->" << line << ":" << endl;    
   pos = line.find(".n"); // extract node
   if (pos != -1) {
     line.erase(pos+1,1);
@@ -102,7 +109,7 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
     } else return 3; // no net info
   }  
   
-
+if (mydbg == 1) cerr << "z line->" << line << ":" << endl;    
   pos = line.find(".z"); // get the zone
   if (pos != -1) {
     line.erase(pos+1,1);
@@ -119,24 +126,42 @@ int CRfcmail::parse(string sender,string recipient, string rawMail)
   pos = rawMail.find("Subject:");
   if (pos != -1) {
     line = rawMail.substr(pos);
-    pos = line.find("\n");
+     pos = line.find("\n");
     if (pos>8) 
       s_Subject.assign(line,9,pos-9);
     else s_Subject="no Subject found";
+if (mydbg == 1) cerr << "Subject line->" << s_Subject << ":" << endl;    
     line.clear();
   } 
 
+//Content-Type: text/plain; charset=UTF-8;
+  pos = rawMail.find("charset=");
+  if (pos != -1) {
+    line = rawMail.substr(pos);
+    pos = line.find("=");
+    int index = line.find(" ",pos);
+    line = line.substr(pos+1,index);
+    
+    int indexsc = line.find(";",pos);
+    int indexcr = line.find("\r",pos);
+    int indexlf = line.find("\n",pos);
+
+    index = max(indexsc,max(indexcr,indexlf));
+    cfg->s_CharsetRfc.assign(line,0,index);
+    line.clear();
+if (mydbg == 1) cerr << "RFC-Charset->" << cfg->s_CharsetRfc << ":" << endl;    
+  }
+
+                       
   istringstream f(rawMail);
   int inmsg = 0;
   while (getline(f, line)) {
-  cerr << line << endl;
     if (inmsg == 1) {
       s_Message.append(line);
       s_Message.append("\r");
     } else {
       if (!line.empty()) {
         pos = line.find_first_not_of(" \t");
-        cerr << pos << endl;
 //        if (pos == 1)
 //          s_Ctrl.append("\001RFC:");                  
 //        else
@@ -184,7 +209,7 @@ int CRfcmail::sendmail()
     string s_Kludges;
     /* write fmpt, topt, intl info */
     char *buf;
-    buf = new char[200];
+    buf = new char[1024];
 
     sprintf(buf, "\001INTL %i:%i/%i %i:%i/%i",
             DestMsg.F_To.zone, DestMsg.F_To.net, DestMsg.F_To.node,
@@ -214,6 +239,9 @@ int CRfcmail::sendmail()
     s_Kludges+=buf;
     sprintf(buf,"\001CHRS: %s",cfg->s_CharsetFtn.c_str());
     s_Kludges+=buf;    
+
+    sprintf(buf,"\001RFC-Charset: %s",cfg->s_CharsetRfc.c_str());
+    s_Kludges+=buf;    
     
     
     DestMsg.s_Ctrl += s_Kludges;
@@ -226,13 +254,11 @@ int CRfcmail::sendmail()
     conv.convert(s_Message,outmsg);  
     
     DestMsg.s_MsgText = outmsg; 
-    
     DestMsg.sent=true;
-    DestMsg.Write();
+    DestMsg.Write(); 
     string logstr="Message written to Area " + cfg->s_Netmail;
     log->add(2,logstr);
-    
-    DestMsg.Close();
+    DestMsg.Close(); 
     AArea.Close(); 
  
   }  

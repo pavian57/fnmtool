@@ -63,21 +63,25 @@ int main(int argc, char *argv[])
   string results(it, end);
   
   if (cfg->debug) {
-    myfile << sender << endl;
-    myfile << recipient << endl;
-    myfile << basename(prgname.c_str()) << endl;
-    myfile << results;
+    myfile << "Sender->" << sender << ":" <<  endl;
+    myfile << "Recipient->" << recipient << ":" <<   endl;
+    myfile << "program->" << basename(prgname.c_str())<< ":" << endl;
+    myfile << "results->" << results << ":" <<  endl;
   }
   rc = rfcmail.parse(sender,recipient,results);
-//  cout << rc << endl;
   rcode.str("");
   rcode << rc ;
 	logstr="parse mail returned=";
 	logstr += rcode.str();
   log->add(2,logstr);
+	if (cfg->debug) {
+    myfile << "rcode->" << rcode << ":" <<  endl;
+  }
+  
+
   if (rc==0) {
     rc = rfcmail.sendmail();
-     rcode.str("");
+  rcode.str("");
   rcode << rc ;
 	logstr="send mail returned=";
 	logstr += rcode.str();

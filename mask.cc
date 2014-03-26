@@ -90,7 +90,7 @@ bool CMask::operator==(const CMask& msk)
 	if (msk.s_Subject == s_Subject) subjMatch=true;
 	if (s_Subject=="*") subjMatch=true;
 
-  if (cfg->debug) {	
+/*  if (cfg->debug) {	
     cerr << endl << endl;
     cerr << "F_From=" << F_From << ": msk.F_From=" << msk.F_From << ": frmMatch=" << frmMatch  <<endl ;
     cerr << "F_To=" << F_To << ": msk.F_To=" << msk.F_To << ": toMatch=" << toMatch  <<endl ;
@@ -101,7 +101,7 @@ bool CMask::operator==(const CMask& msk)
     
     cerr << "sndMatch=" << sndMatch << ": rcpMatch=" << rcpMatch << ": frmMatch=" << frmMatch << ": toMatch=" << toMatch << ": subjMatch=" << subjMatch << ": attrMatch=" << attrMatch << endl;
   }
-
+*/
 
 	/* do dirty checking with ~ */
 	if (strchr(s_Sender.c_str(), '~')!=NULL)
