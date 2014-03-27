@@ -32,33 +32,10 @@ class CMask
 		CFtnAddr		F_From;
 		CFtnAddr		F_To;
 		string			s_Subject;
-		dword			d_Flags;
+		dword       d_Flags;
 		string			s_Flags;
+		string 			s_MsgFlags;
 		vector<int>		i_match;
-		/* attributes */
-		short    priv;
-		short	 crash;
-		short	 received;
- 		short	 sent;
-		short	 attach;
-		short	 forward;
-		short	 orphan;
-		short	 kill;
-		short	 local;
-		short	 hold;
-		short	 file_request;
-		short	 scanned;
-		short	 direct;
-		short	 update_request;
-		short	 rrq;
-		short	 return_receipt;
-		short	 immediate;
-		short	 TFS;
-		short	 KFS;
-		short	 archive_sent;
-		short	 is_return_receipt;
-		short	 confirm_receipt_request;
-		int parseAttr(string s_Flags);
-		bool compareAttr(dword attr);
+		bool checkAttr(string s_Flags,dword attr);
 };
 #endif

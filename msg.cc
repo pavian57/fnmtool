@@ -183,10 +183,7 @@ CMask CMsg::GetMask()
 	msk.s_Subject=s_Subject;
 	msk.F_From=F_From;
 	msk.F_To=F_To;
-/*	cout << "s_From=" << s_From << ": s_To=" << s_To << endl ;
-//	cout << "F_From=" << F_From << ": F_To=" << F_To << endl ;
-//	cout << "s_Subject=" << s_Subject << endl ;
-*/	
+	msk.d_Flags=d_Attr;
 	return msk;
 }
 

@@ -9,9 +9,9 @@ else
   LFLAGS= $(OPTLFLAGS)
 endif
 
-CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\" $(ADDCDEFS)
+#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\" $(ADDCDEFS)
 
-#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
+CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
 
 #CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/home/ruedi/work/src/fidonet/husky/fnmtool/fnmtool.cfg\" $(ADDCDEFS)
 
