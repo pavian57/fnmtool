@@ -132,6 +132,13 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
             continue;
         }
         stopwithmsg = false;
+        
+        if (cfg->debug) {
+          char number_[6];
+          sprintf(number_, "%lu", MsgGetCurMsg(a_Area));
+          cerr << "New Message = " << number_  << endl;
+        }
+                              
 
         for (unsigned int j=start; j<stop+1 && !stopwithmsg; j++)
         {
@@ -175,8 +182,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
 
                     if (cfg->debug)
                     {
-                        cerr << "temp=" << temp << ": RestParam=" << RestParam << ": type=" << type << ": number=" << number << endl;
-                        cerr << "Msgnum=" << number  << ": MSGREAD=" << (Message.d_Attr & MSGREAD) << ": MSGLOCAL=" << (Message.d_Attr & MSGLOCAL) << ": MSGRRQ=" << (Message.d_Attr & MSGRRQ) << endl;
+                        cerr << "\tAction=" << type << ": RestParam=" << RestParam <<  endl;
                     }                        
 
                     /*----- action file -----*/
@@ -212,34 +218,19 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     /*----- action ping --------*/
                     if (type=="ping")
                     {
-                        if (((Message.d_Attr & MSGREAD) == 0) && ((Message.d_Attr & MSGLOCAL) == 0 ) && ((Message.d_Attr & MSGRRQ) == 0))
-                        {
-                            CPingPongAction TempAction;
-                            TempAction.msgnum=MsgGetCurMsg(a_Area);
-                            TempAction.Area=a_Area;
-                            TempAction.run();
-                        }
-                        else if (((Message.d_Attr & MSGREAD) == 0) && ((Message.d_Attr & MSGLOCAL) == 0 ) && ((Message.d_Attr & MSGRRQ) == MSGRRQ ))
-                        {
-                            CDeleteAction TempAction;
-                            TempAction.Area=a_Area;
-                            TempAction.msgnum=MsgGetCurMsg(a_Area);
-                            TempAction.run();
-                            stopwithmsg = true;
-                            break;
-                        }
+                        CPingPongAction TempAction;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.Area=a_Area;
+                        TempAction.run();
                     }
                     /*------- action copy --------*/
                     if (type=="copy")
                     {
-                        if (((Message.d_Attr & MSGREAD) == 0) && ((Message.d_Attr & MSGLOCAL) == 0 ))
-                        {
                         CCopyAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
                         TempAction.msgnum=MsgGetCurMsg(a_Area);
                         TempAction.run();
-                        }
                     }
                     /*------- action move --------*/
                     if (type=="move")
@@ -255,42 +246,31 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     /*-------- packmail action -------*/
                     if (type=="packmail")
                     {
-                        if (((Message.d_Attr & MSGSENT) != MSGSENT) && ((Message.d_Attr & MSGLOCAL) == MSGLOCAL))
-                        {
-                            CPackmailAction TempAction;
-                            TempAction.param=RestParam;
-                            TempAction.Area=a_Area;
-                            TempAction.msgnum=MsgGetCurMsg(a_Area);
-                            TempAction.run();
-                        }
+                        CPackmailAction TempAction;
+                        TempAction.param=RestParam;
+                        TempAction.Area=a_Area;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.run();
                     }
                     /*-------- movemail action -------*/
                     if (type=="movemail")
                     {
-
-
-                        if (((Message.d_Attr & MSGSENT) != MSGSENT) && ((Message.d_Attr & MSGLOCAL) == MSGLOCAL))
-                        {
-                            CMovemailAction TempAction;
-                            TempAction.param=RestParam;
-                            TempAction.Area=a_Area;
-                            TempAction.msgnum=MsgGetCurMsg(a_Area);
-                            TempAction.run();
-                        }
+                        CMovemailAction TempAction;
+                        TempAction.param=RestParam;
+                        TempAction.Area=a_Area;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.run();
                     }
 
                     /*-------- email action -------*/
                     if (type=="email")
                     {
-                        if ((Message.d_Attr & MSGREAD) == 0 )
-                        {
-                            CEmailAction TempAction;
-                            TempAction.param=RestParam;
-                            TempAction.Area=a_Area;
-                            TempAction.s_Area=s_Path;
-                            TempAction.msgnum=MsgGetCurMsg(a_Area);
-                            TempAction.run();
-                        }
+                        CEmailAction TempAction;
+                        TempAction.param=RestParam;
+                        TempAction.Area=a_Area;
+                        TempAction.s_Area=s_Path;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.run();
                     }
 
                     /*-------- rewrite action -----------*/
