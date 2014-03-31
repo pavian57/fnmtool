@@ -189,8 +189,16 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     if (type=="file")
                     {
                         CFileAction TempAction;
-                        TempAction.s_Filename=RestParam;
-                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
+                        unsigned int idx;
+                        string extension;                            
+                        idx =RestParam.rfind(".");
+                        if (idx !=RestParam.npos) TempAction.s_Filename = RestParam.substr(0,idx);
+                        if (idx !=RestParam.npos) extension = RestParam.substr(idx);
+                        TempAction.s_Filename += "-";
+                        TempAction.s_Filename += number;
+                        if (!extension.empty())
+                          TempAction.s_Filename +=extension;
+//                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
                         TempAction.msgnum=MsgGetCurMsg(a_Area);
                         TempAction.Area=a_Area;
                         TempAction.run();
@@ -200,8 +208,16 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     if (type=="hdrfile")
                     {
                         CHdrFileAction TempAction;
-                        TempAction.s_Filename=RestParam;
-                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
+                        unsigned int idx;
+                        string extension;
+                        idx =RestParam.rfind(".");
+                        if (idx !=RestParam.npos) TempAction.s_Filename = RestParam.substr(0,idx);
+                        if (idx !=RestParam.npos) extension = RestParam.substr(idx);
+                        TempAction.s_Filename += "-";
+                        TempAction.s_Filename += number;
+                        if (!extension.empty())
+                          TempAction.s_Filename +=extension;
+//                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
                         TempAction.msgnum=MsgGetCurMsg(a_Area);
                         TempAction.Area=a_Area;
                         TempAction.run();

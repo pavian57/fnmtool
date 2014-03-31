@@ -5,5 +5,5 @@ extern CConfig * cfg;
 extern CLog * log;
 
 void capitalize (string &s);
-
+string printAttr(dword attr);
 

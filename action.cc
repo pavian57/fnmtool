@@ -47,102 +47,120 @@ CAction::~CAction()
 
 int CFileAction::run()
 {
-	CMsg Message;
-	Message.Open(msgnum, Area);
+	CMsg SrcMsg;
+	SrcMsg.Open(msgnum, Area);
 	f_txtFile=fopen(s_Filename.c_str(), "w");
+	if (f_txtFile != NULL) {
     fputs("From: ",f_txtFile);
-    fputs(Message.s_From.c_str(),f_txtFile);
-    fprintf(f_txtFile, ", %i:%i/%i.%i", Message.F_From.zone, Message.F_From.net, Message.F_From.node, Message.F_From.point);
+    fputs(SrcMsg.s_From.c_str(),f_txtFile);
+    fprintf(f_txtFile, ", %i:%i/%i.%i", SrcMsg.F_From.zone, SrcMsg.F_From.net, SrcMsg.F_From.node, SrcMsg.F_From.point);
     fputs("\n",f_txtFile);
     fputs("To  : ",f_txtFile);
-    fputs(Message.s_To.c_str(),f_txtFile);
-    fprintf(f_txtFile, ", %i:%i/%i.%i", Message.F_To.zone, Message.F_To.net, Message.F_To.node, Message.F_To.point);
+    fputs(SrcMsg.s_To.c_str(),f_txtFile);
+    fprintf(f_txtFile, ", %i:%i/%i.%i", SrcMsg.F_To.zone, SrcMsg.F_To.net, SrcMsg.F_To.node, SrcMsg.F_To.point);
     fputs("\n",f_txtFile);
     fputs("Subject: ",f_txtFile);
-    fputs(Message.s_Subject.c_str(),f_txtFile);
+    fputs(SrcMsg.s_Subject.c_str(),f_txtFile);
     fputs("\n",f_txtFile);
     fputs("---------------------\n",f_txtFile);
-    for (unsigned int i=0; i<Message.s_MsgText.length(); i++)
+    for (unsigned int i=0; i<SrcMsg.s_MsgText.length(); i++)
     {
-        if (Message.s_MsgText[i]=='\r') Message.s_MsgText[i]='\n';
+        if (SrcMsg.s_MsgText[i]=='\r') SrcMsg.s_MsgText[i]='\n';
     }
-    fputs(Message.s_MsgText.c_str(),f_txtFile);
-    Message.Close();
+    fputs(SrcMsg.s_MsgText.c_str(),f_txtFile);
+    SrcMsg.Close();
     string logstr="Writing Message to File " + s_Filename;
     log->add(2,logstr);
     fclose(f_txtFile);
     return 0;
+  } else {
+    string logstr="Open File " + s_Filename + " failed!";
+    log->add(2,logstr);
+  }
+  return -1;
 }
 
 int CHdrFileAction::run()
 {
-    CMsg Message;
-    Message.Open(msgnum, Area);
+    CMsg SrcMsg;
+    SrcMsg.Open(msgnum, Area);
     f_txtFile=fopen(s_Filename.c_str(), "w");
-    fputs("From: ",f_txtFile);
-    fputs(Message.s_From.c_str(),f_txtFile);
-    fprintf(f_txtFile, ", %i:%i/%i.%i", Message.F_From.zone, Message.F_From.net, Message.F_From.node, Message.F_From.point);
-    fputs("\n",f_txtFile);
-    fputs("To  : ",f_txtFile);
-    fputs(Message.s_To.c_str(),f_txtFile);
-    fprintf(f_txtFile, ", %i:%i/%i.%i", Message.F_To.zone, Message.F_To.net, Message.F_To.node, Message.F_To.point);
-    fputs("\n",f_txtFile);
-    fputs("Subject: ",f_txtFile);
-    fputs(Message.s_Subject.c_str(),f_txtFile);
-    fputs("----------------------\n", f_txtFile);
-    Message.Close();
-    fclose(f_txtFile);
-    return 0;
+    if (f_txtFile != NULL) {
+      fputs("From:      ",f_txtFile);
+      fputs(SrcMsg.s_From.c_str(),f_txtFile);
+      fprintf(f_txtFile, ", %i:%i/%i.%i", SrcMsg.F_From.zone, SrcMsg.F_From.net, SrcMsg.F_From.node, SrcMsg.F_From.point);
+      fputs("\n",f_txtFile);
+      fputs("To  :      ",f_txtFile);
+      fputs(SrcMsg.s_To.c_str(),f_txtFile);
+      fprintf(f_txtFile, ", %i:%i/%i.%i", SrcMsg.F_To.zone, SrcMsg.F_To.net, SrcMsg.F_To.node, SrcMsg.F_To.point);
+      fputs("\n",f_txtFile);
+      fputs("Subject:   ",f_txtFile);
+      fputs(SrcMsg.s_Subject.c_str(),f_txtFile);
+      fputs("\n",f_txtFile);
+      fputs("Attribute: ",f_txtFile);
+      fputs(printAttr(SrcMsg.d_Attr).c_str(),f_txtFile);
+      fputs("\n",f_txtFile);
+      fputs("----------------------\n", f_txtFile);
+      SrcMsg.Close();
+      string logstr="Writing Header to File " + s_Filename;
+      log->add(2,logstr);
+      fclose(f_txtFile);
+      return 0;
+    } else {
+       string logstr="Open File " + s_Filename + " failed!";
+    	 log->add(2,logstr);
+    }
+    return -1;
 }
 
 int CBounceAction::run()
 {
-    CMsg SrcMessage;
-    CMsg TgtMessage;
+    CMsg SrcMsg;
+    CMsg DestMsg;
     /* open messages */
-    SrcMessage.Open(msgnum, Area);
-    TgtMessage.New(Area);
+    SrcMsg.Open(msgnum, Area);
+    DestMsg.New(Area);
     if (!cfg->silent) cerr << "created message" << endl;
     /* Write Headers */
-    TgtMessage.F_From=SrcMessage.F_To;
-    TgtMessage.s_From=SrcMessage.s_To;
-    TgtMessage.F_To=SrcMessage.F_From;
-    TgtMessage.s_To=SrcMessage.s_From;
+    DestMsg.F_From=SrcMsg.F_To;
+    DestMsg.s_From=SrcMsg.s_To;
+    DestMsg.F_To=SrcMsg.F_From;
+    DestMsg.s_To=SrcMsg.s_From;
 
     /* Write Subject */
-    TgtMessage.s_Subject="[bounce]";
-    TgtMessage.s_Subject+=SrcMessage.s_Subject;
+    DestMsg.s_Subject="[bounce]";
+    DestMsg.s_Subject+=SrcMsg.s_Subject;
 
     /* write attributes */
-    TgtMessage.d_Attr=MSGPRIVATE;
+    DestMsg.d_Attr=MSGPRIVATE;
 
     string s_Text;
     string s_Kludges;
     if (!cfg->silent) cerr << "writing kludges" << endl;
     /* write fmpt, topt, intl info */
     char buf[25];
-    if (TgtMessage.F_From.point!=0)
+    if (DestMsg.F_From.point!=0)
     {
-        sprintf(buf, "\001FMPT %i", TgtMessage.F_From.point);
+        sprintf(buf, "\001FMPT %i", DestMsg.F_From.point);
         s_Kludges+=buf;
     }
-    if (TgtMessage.F_To.point!=0)
+    if (DestMsg.F_To.point!=0)
     {
-        sprintf(buf, "\001TOPT %i", TgtMessage.F_To.point);
+        sprintf(buf, "\001TOPT %i", DestMsg.F_To.point);
         s_Kludges+=buf;
     }
     sprintf(buf, "\001INTL %i:%i/%i %i:%i/%i",
-            TgtMessage.F_To.zone, TgtMessage.F_To.net, TgtMessage.F_To.node,
-            TgtMessage.F_From.zone, TgtMessage.F_From.net, TgtMessage.F_From.node);
+            DestMsg.F_To.zone, DestMsg.F_To.net, DestMsg.F_To.node,
+            DestMsg.F_From.zone, DestMsg.F_From.net, DestMsg.F_From.node);
     s_Kludges+=buf;
     if (!cfg->silent) cerr  << "wrote kludges!" << endl;
     string s_Temp;
     if (!cfg->silent) cerr  << "writing messageText" << endl;
-    TgtMessage.s_Ctrl+=s_Kludges;
+    DestMsg.s_Ctrl+=s_Kludges;
 
-    TgtMessage.Write();
-    TgtMessage.Close();
-    SrcMessage.Close();
+    DestMsg.Write();
+    DestMsg.Close();
+    SrcMsg.Close();
     return 0;
 }
 

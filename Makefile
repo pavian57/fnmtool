@@ -35,6 +35,7 @@ OBJS=	msgid$(OBJ)	\
 	msg$(OBJ)	\
 	pkt$(OBJ)	\
 	rfcmail$(OBJ)	\
+	fnmsmtp$(OBJ)	\
 	strsep$(OBJ)
 
 OBJS1=fnmtool$(OBJ) 
@@ -42,7 +43,7 @@ OBJS2=fnmrfc2ftn$(OBJ)
 
 
 HDRS=action.h area.h bastypes.h config.h ftnaddr.h global.h log.h mask.h \
-  msg.h op.h pkt.h scndr.h strsep.h version.h msgid.h
+  msg.h op.h pkt.h scndr.h strsep.h version.h msgid.h fnmsmtp.h
 
 all: fnmtool$(EXE) fnmrfc2ftn$(EXE) fnmtool.1.gz
 
