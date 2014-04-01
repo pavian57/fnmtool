@@ -1,0 +1,43 @@
+# $Id: makefile.lnx,v 1.8 2011/11/15 21:40:31 stas_degteff Exp $
+# Linux legacy makefile
+#
+
+DEBUG?=-s
+# set to -g for debugging
+
+
+CC=g++
+EXENAMEFLAG=-o 
+SRC_DIR=../src/
+CFLAGS=-I../h/  -I../.. -I../../huskylib -I../../smapi -c -O3 -Wall $(DEBUG) 
+LFLAGS=$(DEBUG)
+CDEFS =-DUNIX -DCONFIGDIR=\"fnmtool.cfg\"  $(ADDCDEFS)
+
+_OBJ=.o
+RM=rm
+
+# Order of libraries are mandatory!
+LIBS= ../../smapi/make/libsmapilnx.a ../../huskylib/make/libhuskylnx.a
+
+#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\" $(ADDCDEFS)
+
+#CDEFS = -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
+
+#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/home/ruedi/work/src/fidonet/husky/fnmtool/fnmtool.cfg\" $(ADDCDEFS)
+
+
+#CDEFS=-DCONFIGDIR=\"fnmtool.cfg\"  $(ADDCDEFS)
+
+
+default: all
+
+%$(OBJ): $(SRC_DIR)%.cc
+	$(CC) $(LFLAGS) $(CFLAGS) $(CDEFS) $(SRC_DIR)$*.cc
+
+include ../makefile.inc
+
+all: commonall
+
+clean: commonclean
+
+distclean: commondistclean

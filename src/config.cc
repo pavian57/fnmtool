@@ -159,7 +159,7 @@ CConfig::CConfig()
 		else if (parm.s_Token=="rfccharset")
 		{
       s_CharsetRfc = parm.s_RestOfLine;
-		}		
+		}
 		else if (parm.s_Token=="outbound")
 		{
 			s_Outbound=parm.s_RestOfLine;

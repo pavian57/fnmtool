@@ -16,7 +16,7 @@
 extern "C"
 {
 #include <smapi/msgapi.h>
-#include <quickmail.h>
+//#include <quickmail.h>
 }
 #include "ftnaddr.h"
 #include "mask.h"
@@ -28,6 +28,7 @@ extern "C"
 #include "global.h"
 #include "msgid.h"
 #include "iconvpp.h"
+#include "fnmsmtp.h"
 
 using namespace std;
 
@@ -525,8 +526,8 @@ int CMovemailAction::run()
 int CEmailAction::run()
 {
     CMsg Message;
+		CSmtp sendmail;
     string smtpserver, smtpport, mailto;
-    int port = 25;
     string temp=param;
     while (temp[0]==' ') temp.erase(0,1);
     do
@@ -560,8 +561,6 @@ int CEmailAction::run()
         temp.erase(0,1);
     }
     while (temp[0]!=' ');
-
-    port = atoi(smtpport.c_str());
 
     while (temp[0]==' ') temp.erase(0,1);
     mailto=temp;
@@ -609,6 +608,7 @@ int CEmailAction::run()
     sprintf(buf+strlen(buf),"%s",outmsg.c_str());  //Message.s_MsgText.c_str());
 
     if (cfg->debug) cerr  << Message.s_MsgText << endl;
+
     Message.read = true;
     Message.WriteAttr();
     Message.Close();
@@ -618,33 +618,33 @@ int CEmailAction::run()
     replace(Message.s_From.begin(),Message.s_From.end(),' ','_');
     sprintf(mailfrom,"%s@",Message.s_From.c_str());
     sprintf(mailfrom+strlen(mailfrom), "p%i.f%i.n%i.z%i.fidonet", Message.F_From.point, Message.F_From.node, Message.F_From.net, Message.F_From.zone);
-    quickmail_initialize();
-    quickmail mailobj = quickmail_create(mailfrom,Message.s_Subject.c_str());
-    quickmail_add_to(mailobj, mailto.c_str());
-    quickmail_set_body(mailobj,buf);
-    delete [] mailfrom;
+
+		sendmail.setMailServer(smtpserver);
+		sendmail.setPort(atoi(smtpport.c_str()));
+
+    sendmail.setContentType(cfg->s_CharsetRfc);
+	  sendmail.setMailFrom(mailfrom); 
+		sendmail.setMailTo(mailto);
+		sendmail.setMailSubject(Message.s_Subject);
+		sendmail.setMailText(buf);
 
 
-    const char* errmsg;
-    if (cfg->debug)
-        quickmail_set_debug_log(mailobj, stderr);
-    else
-        quickmail_set_debug_log(mailobj, NULL); //stderr);
-    if ((errmsg = quickmail_send(mailobj, smtpserver.c_str(), port, NULL,NULL)) != NULL)
-    {
-        string logstr="Error__ sending e-mail: ";
-        logstr += errmsg;
-        log->add(5,logstr);
-    }
-    quickmail_destroy(mailobj);
 
-    ostringstream out;
-    string  areaname;
-    areaname.append(basename(s_Area.c_str()));
-    out << "Sending message #: " << msgnum << " from Area: " << areaname << " to: " << mailto;
-    log->add(2,out.str());
 
-    if (!cfg->silent) cerr << out.str()  << endl;
+ 		int rc = sendmail.sendmail();
+		
+		if (rc != 0) {
+    	string logstr="Error__ sending e-mail: ";
+//      logstr += errmsg;
+      log->add(5,logstr);
+    } else {
+    	ostringstream out;
+	    string  areaname;
+  	  areaname.append(basename(s_Area.c_str()));
+	    out << "Sending message #: " << msgnum << " from Area: " << areaname << " to: " << mailto;
+  	  log->add(2,out.str());
+	    if (!cfg->silent) cerr << out.str()  << endl;
+		}
 
     delete [] buf;
     return 0;

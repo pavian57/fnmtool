@@ -33,11 +33,13 @@ int main(int argc, char *argv[])
 	log->intro(prgname);
 	
 	ofstream myfile;
+	int fo;
   if (cfg->debug) {  
     char *tmpname = strdup("/tmp/tmpfileXXXXXX");
-    mkstemp(tmpname);
+    fo = mkstemp(tmpname);
 
-    myfile.open(tmpname); // ("/tmp/example.txt");
+		if (fo != -1) 
+	    myfile.open(tmpname); // ("/tmp/example.txt");
   }
 
 	
@@ -75,7 +77,8 @@ int main(int argc, char *argv[])
 	logstr += rcode.str();
   log->add(2,logstr);
 	if (cfg->debug) {
-    myfile << "rcode->" << rcode << ":" <<  endl;
+		if (fo != -1)
+	    myfile << "rcode->" << rcode << ":" <<  endl;
   }
   
 
@@ -96,7 +99,8 @@ int main(int argc, char *argv[])
   delete log;
   delete cfg;
   if (cfg->debug) {  
-    myfile.close();
+		if (fo != -1)
+   		myfile.close();
   }
   
 }
