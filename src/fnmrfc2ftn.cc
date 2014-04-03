@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	log = new CLog(cfg->s_Log);
 	log->intro(prgname);
 	
-#ifdef LINUX
+#ifdef __linux__
 	ofstream myfile;
 	int fo;
   if (cfg->debug) {  
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
   istream_iterator<char> it(cin);
   istream_iterator<char> end;
   string results(it, end);
-#ifdef LINUX  
+#ifdef __linux__  
   if (cfg->debug) {
     myfile << "Sender->" << sender << ":" <<  endl;
     myfile << "Recipient->" << recipient << ":" <<   endl;
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	logstr="parse mail returned=";
 	logstr += rcode.str();
   log->add(2,logstr);
-#ifdef LINUX  
+#ifdef __linux__  
 	if (cfg->debug) {
 		if (fo != -1)
 	    myfile << "rcode->" << rcode << ":" <<  endl;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 	log->outro();
   delete log;
   delete cfg;
-#ifdef LINUX  
+#ifdef __linux__  
   if (cfg->debug) {  
 		if (fo != -1)
    		myfile.close();

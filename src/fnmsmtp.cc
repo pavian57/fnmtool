@@ -31,7 +31,7 @@ using namespace std;
 
 CSmtp::CSmtp()
 {
-#ifndef LINUX
+#ifndef __linux__
   WSAData version;        //We need to check the version.
     WORD mkword=MAKEWORD(2,2);
     int what=WSAStartup(mkword,&version);
@@ -264,7 +264,7 @@ int CSmtp::close_con()
 {
   s_ErrorMsg.clear();
   i_ReturnCode = 0;
-#ifdef LINUX  
+#ifdef __linux__
  	i_ReturnCode = shutdown(i_Socket,SHUT_RDWR);
 #else
 	i_ReturnCode = shutdown(i_Socket,SD_BOTH);

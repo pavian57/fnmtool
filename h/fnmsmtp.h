@@ -7,7 +7,8 @@
 #include <stdio.h>
 #endif
 #include<iostream>    //cout
-#ifdef LINUX
+
+#ifdef __linux__
 #include<sys/socket.h>    //socket
 #include<arpa/inet.h> //inet_addr
 #include<netdb.h> //hostent
