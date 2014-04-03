@@ -1,8 +1,4 @@
-#ifndef IS_OLDGCC
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 #ifdef __GNUC__
 #include <cstdio>
 #else

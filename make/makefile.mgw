@@ -1,18 +1,30 @@
+# $Id: makefile.mgw,v 1.2 2011/11/15 19:42:05 stas_degteff Exp $
+# Makefile to build FIDOCONFIG/win32 with Mingw32 from Cygwin.
+# Use only with the Husky build environment.
+# Produce static binaries and library
+
 ## include common makefiles part ##
 include ../../huskybse/huskymak.mgw
 include makefile.inc
 
+
+CXX=c++
+_CXX=.cc
+OSTYPE=WIN
+
 # includes directories
-CINCL	+= -I$(H_DIR) -I../../fidoconf -I../../smapi/ -I../../huskylib/ -I../../areafix/
+CINCL	+= -IC:\MinGW\include -I$(H_DIR) -I../../huskylib/ -I../../smapi/
+
+CDEFS = -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
 
 # libraries need to build binary file
-LIBS	+= ../../areafix/make/$(LIBPREFIX)areafix$(LIBSUFFIX)$(_LIB) \
-	   ../../fidoconf/make/$(LIBPREFIX)fidoconfig$(LIBSUFFIX)$(_LIB) \
-	   ../../smapi/make/$(LIBPREFIX)smapi$(LIBSUFFIX)$(_LIB) \
-	   ../../huskylib/make/$(LIBPREFIX)husky$(LIBSUFFIX)$(_LIB)
-
-READMEFILES= ../BUG-REPORTING ../BUGS ../ChangeLog ../COPYING ../CREDITS \
-	     ../INSTALL ../README ../TODO ../VERSION ../filter.pl
+                         
+LIBS += ../../smapi/make/$(LIBPREFIX)smapi$(LIBSUFFIX)$(_LIB)
+LIBS +=  ../../huskylib/make/$(LIBPREFIX)husky$(LIBSUFFIX)$(_LIB) 			
+LIBS += -liconv -lws2_32      
+			
+READMEFILES= ../ChangeLog ../HISTORY ../README.TXT ../VERSION ../INSTALL \
+	     ../TODO ../COPYING
 
 default:
 	@echo
@@ -23,32 +35,26 @@ default:
 
 all:	programs
 
+
 programs: $(PROGRAMS)
 
-%$(_OBJ): $(_SRC_DIR)%$(_C)
+%$(_OBJ): $(_SRC_DIR)%$(_CXX)   
 	@echo Compiling $<
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(OBJOPT) $<
+	@$(CXX) $(CFLAGS) $(CDEFS) $(CINCL) $(OBJOPT) $<
 
-$(PKTINFO): $(PKTINFOOBJS)
-	@echo Create $(PKTINFO)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
+$(FNMTOOL): $(FNMTOOLOBJ)
+	@echo Create $(FNMTOOL)
+	@$(CXX) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
 
-$(TPKT): $(TPKTOBJS)
-	@echo Create $(TPKT)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
+#%$(_OBJ): $(_SRC_DIR)%.cc
+#	@echo Compiling $<
+#	@$(CXX) $(CXXFLAGS)  $(CFLAGS) $(CDEFS) $(CINCL) $(OBJOPT) $<
 
-$(TXT2PKT): $(TXT2PKTOBJS)
-	@echo Create $(TXT2PKT)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
+#$(FNMTOOL):  $(FNMTOOLOBJ)
+#	@echo Create $(FNMTOOL)
+#	@$(CXX) $(CXXFLAGS) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $< $(LIBS)
 
-$(HPTLINK): $(HPTLINKOBJS)
-	@echo Create $(HPTLINK)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
+$(FNMRFC2FTN):   $(FNMRFC2FTNOBJ)
+	@echo Create $(FNMRFC2FTN)
+	@$(CXX)  $(CXXFLAGS) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $< $(LIBS)
 
-$(HPTTREE): $(HPTTREEOBJS)
-	@echo Create $(HPTTREE)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
-
-$(HPT): $(HPTOBJS)
-	@echo Create $(HPT)
-	@$(CC) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)

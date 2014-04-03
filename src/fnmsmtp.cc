@@ -31,7 +31,20 @@ using namespace std;
 
 CSmtp::CSmtp()
 {
-    s_MailServer.clear();
+#ifndef LINUX
+  WSAData version;        //We need to check the version.
+    WORD mkword=MAKEWORD(2,2);
+    int what=WSAStartup(mkword,&version);
+    if(what!=0){
+        std::cout<<"This version is not supported! - \n"<<WSAGetLastError()<<std::endl;
+		//take some action if bad 
+    }
+    else{
+        std::cout<<"Good - Everything fine!\n"<<std::endl;
+    }    
+#endif    
+
+	s_MailServer.clear();
     i_Socket = -1;
     i_Port = 25;
     address = "";
@@ -121,13 +134,17 @@ int CSmtp::sendmail()
   if (i_Port < 0) i_Port = 25;
   if (s_MailServer.empty()) s_MailServer = "localhost";
 	
+  
+cerr <<  "s_MailServer" << s_MailServer << endl;
+cerr << "open_con" << endl; 
 	i_ReturnCode = open_con();
   if (i_ReturnCode != 0) {
+cerr << "open_con failes" << endl;  
     //Problem
   }
-
   i_ReturnCode = receive();
 	if (i_ReturnCode != 220) {
+cerr << "open_con failes" << endl;  
 		//Problem 
 	}
   send_data("HELO "+s_LocalHostname+"\r\n");
@@ -247,7 +264,11 @@ int CSmtp::close_con()
 {
   s_ErrorMsg.clear();
   i_ReturnCode = 0;
+#ifdef LINUX  
  	i_ReturnCode = shutdown(i_Socket,SHUT_RDWR);
+#else
+	i_ReturnCode = shutdown(i_Socket,SD_BOTH);
+#endif	
   if (i_ReturnCode != 0) {
 		i_ReturnCode = errno;
 		s_ErrorMsg = strerror(errno);
@@ -266,7 +287,7 @@ int CSmtp::send_data(string str)
 		s_ErrorMsg = "Send failed";
     return i_ReturnCode;
 	}
-	if (cfg->debug)
+//	if (cfg->debug)
 		cerr << "rc=" << i_ReturnCode << ": send_data=" << str;
 
 	return i_ReturnCode;
@@ -289,7 +310,7 @@ int CSmtp::receive()
   s_ServerMessage = recvData;
 	int pos =  s_ServerMessage.find(" ");
   istringstream ( s_ServerMessage.substr(0,pos) ) >> i_ReturnCode;
-	if (cfg->debug)
+//	if (cfg->debug)
 		cerr << "rc=" << i_ReturnCode << ": recvData=" << recvData << ": lenRead=" << lenRead <<  endl;
 
   return i_ReturnCode;

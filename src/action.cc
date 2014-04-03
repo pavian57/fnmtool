@@ -526,7 +526,7 @@ int CMovemailAction::run()
 int CEmailAction::run()
 {
     CMsg Message;
-		CSmtp sendmail;
+  	CSmtp sendmail;
     string smtpserver, smtpport, mailto;
     string temp=param;
     while (temp[0]==' ') temp.erase(0,1);
@@ -619,6 +619,7 @@ int CEmailAction::run()
     sprintf(mailfrom,"%s@",Message.s_From.c_str());
     sprintf(mailfrom+strlen(mailfrom), "p%i.f%i.n%i.z%i.fidonet", Message.F_From.point, Message.F_From.node, Message.F_From.net, Message.F_From.zone);
 
+
 		sendmail.setMailServer(smtpserver);
 		sendmail.setPort(atoi(smtpport.c_str()));
 
@@ -632,7 +633,7 @@ int CEmailAction::run()
 
 
  		int rc = sendmail.sendmail();
-		
+
 		if (rc != 0) {
     	string logstr="Error__ sending e-mail: ";
 //      logstr += errmsg;

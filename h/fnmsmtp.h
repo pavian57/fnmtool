@@ -7,9 +7,14 @@
 #include <stdio.h>
 #endif
 #include<iostream>    //cout
+#ifdef LINUX
 #include<sys/socket.h>    //socket
 #include<arpa/inet.h> //inet_addr
 #include<netdb.h> //hostent
+#else
+#include <winsock2.h>
+#endif
+
 #include <string>
 #include <time.h>
 #include "version.h"

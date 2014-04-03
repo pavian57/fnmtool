@@ -1,7 +1,3 @@
-# $Id: makefile.inc,v 1.19 2010/04/01 19:41:30 nick_voronin Exp $
-#
-# Common makefiles part (include-file) for hpt
-
 # Use defines before including this file:
 # _OBJ	object files suffix begins with point (".o", ".obj", ... )
 # _LIB	library files suffix begins with point (".a", ".lib", ... )
@@ -12,7 +8,6 @@
 # DLLSUFFIX  dinamic linking library suffix (compiler ID or empty)
 # O, B, L, H prefixes to use with names of objects, binaries, libraries and headers respectively
 
-# Module name
 LIBNAME = fnmtool
 
 # Version
@@ -25,32 +20,38 @@ VER	= $(VERH).$(VERPATCH)
 # Sources directory
 _SRC_DIR= ../src/
 # Headers directory
-H_DIR	= ../src/
+H_DIR	= ../h/
 
 # Programms name
-FNMTOOL	= $(B)fnmtool$(_EXE)
-FNMRFC2FRN	= $(B)fnmrfc2ftn$(_EXE)
+FNMTOOL = $(B)fnmtool$(_EXE)
+FNMRFC2FTN = $(B)fnmrfc2ftn$(_EXE)
 
 # Header files
-HEADERS	= $(H)action.h $(H)addrlist.h $(H)area.h $(H)bastypes.h $(H)config.h  $(H)fnmsmtp.h $(H)ftnaddr.h	\
-					$(H)global.h $(H)iconvpp.h $(H)log.h $(H)mask.h $(H)msg.h $(H)msgid.h $(H)op.h $(H)pkt.h	\
-					$(H)rfc2ftnversion.h $(H)rfcmail.h $(H)scndr.h $(H)strsep.h $(H)version.h
+HEADERS = $(H)action.h $(H)area.h $(H)bastypes.h $(H)config.h $(H)ftnaddr.h $(H)global.h	\
+			$(H)log.h $(H)mask.h $(H)msg.h $(H)op.h $(H)pkt.h $(H)scndr.h	\
+			$(H)strsep.h $(H)version.h $(H)msgid.h $(H)fnmsmtp.h
 
-
-OBJS	   = 
+# Object files: library
+OBJS	=
 
 # Object files: programs
-FNMTOOLOBJS = $(O)msgid$(_OBJ) $(O)action$(_OBJ) $(O)area$(_OBJ) $(O)config$(_OBJ) $(O)ftnaddr$(_OBJ)	\
-							$(O)global$(_OBJ)	$(O)log$(_OBJ) $(O)mask$(_OBJ) $(O)msg$(_OBJ)	$(O)pkt$(_OBJ)	\
-							$(O)rfcmail$(_OBJ) $(O)fnmsmtp$(_OBJ) $(O)strsep$(_OBJ)
+FNMTOOLOBJ =  $(O)fnmtool$(_OBJ)  $(O)msgid$(_OBJ) $(O)action$(_OBJ) $(O)area$(_OBJ) $(O)config$(_OBJ)	\
+			$(O)ftnaddr$(_OBJ) $(O)global$(_OBJ) $(O)log$(_OBJ)	$(O)mask$(_OBJ)	\
+			$(O)msg$(_OBJ) $(O)pkt$(_OBJ) $(O)rfcmail$(_OBJ) $(O)fnmsmtp$(_OBJ)	\
+			$(O)strsep$(_OBJ)
+      
+FNMRFC2FTNOBJ = $(O)fnmrfc2ftn$(_OBJ)  $(O)msgid$(_OBJ) $(O)action$(_OBJ) $(O)area$(_OBJ) $(O)config$(_OBJ)	\
+			$(O)ftnaddr$(_OBJ) $(O)global$(_OBJ) $(O)log$(_OBJ)	$(O)mask$(_OBJ)	\
+			$(O)msg$(_OBJ) $(O)pkt$(_OBJ) $(O)rfcmail$(_OBJ) $(O)fnmsmtp$(_OBJ)	\
+			$(O)strsep$(_OBJ) 
 
-FNMRFC2FRNOBJ =  $(O)msgid$(_OBJ) $(O)action$(_OBJ) $(O)area$(_OBJ) $(O)config$(_OBJ) $(O)ftnaddr$(_OBJ)	\
-							$(O)global$(_OBJ)	$(O)log$(_OBJ) $(O)mask$(_OBJ) $(O)msg$(_OBJ)	$(O)pkt$(_OBJ)	\
-							$(O)rfcmail$(_OBJ) $(O)fnmsmtp$(_OBJ)
 
-PRGOBJS    = $(FNMTOOLOBJS) $(FNMRFC2FRNOBJ)
+PRGOBJS = $(FNMTOOLOBJ) $(FNMRFC2FTNOBJ)
+
 
 # Binary files(s) to bild from sources
-PROGRAMS  = $(FNMTOOL) $(FNMRFC2FRNOBJ)
+PROGRAMS  = $(FNMTOOL) $(FNMRFC2FTN)
+
 
 # List of libraries required to build binary file(s)
+LIBS	=
