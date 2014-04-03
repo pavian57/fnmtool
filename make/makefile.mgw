@@ -15,7 +15,7 @@ OSTYPE=WIN
 # includes directories
 CINCL	+= -IC:\MinGW\include -I$(H_DIR) -I../../huskylib/ -I../../smapi/
 
-CDEFS = -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
+CDEFS = -Wall -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
 
 # libraries need to build binary file
                          
@@ -29,8 +29,7 @@ READMEFILES= ../ChangeLog ../HISTORY ../README.TXT ../VERSION ../INSTALL \
 default:
 	@echo
 	@echo Run \'make programs\' to build static version of programs
-	@echo \($(PROGRAMS)\)
-	@echo
+	@echo \($(PROGRAMS)\)	
 	@echo Run \'make all\' to build all above
 
 all:	programs
@@ -46,15 +45,23 @@ $(FNMTOOL): $(FNMTOOLOBJ)
 	@echo Create $(FNMTOOL)
 	@$(CXX) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
 
-#%$(_OBJ): $(_SRC_DIR)%.cc
-#	@echo Compiling $<
-#	@$(CXX) $(CXXFLAGS)  $(CFLAGS) $(CDEFS) $(CINCL) $(OBJOPT) $<
-
-#$(FNMTOOL):  $(FNMTOOLOBJ)
-#	@echo Create $(FNMTOOL)
-#	@$(CXX) $(CXXFLAGS) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $< $(LIBS)
-
 $(FNMRFC2FTN):   $(FNMRFC2FTNOBJ)
 	@echo Create $(FNMRFC2FTN)
-	@$(CXX)  $(CXXFLAGS) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $< $(LIBS)
+	@$(CXX) $(CFLAGS) $(CDEFS) $(CINCL) $(EXENAMEFLAG) $@ $^ $(LIBS)
 
+
+commonclean: clean
+
+commondistclean:	distclean
+
+
+clean:
+	-$(RM) $(RMOPT) *$(_OBJ)
+	-$(RM) $(RMOPT) core
+	-$(RM) $(RMOPT) *~ 
+	-$(RM) $(RMOPT) .*~ 
+
+distclean: clean
+	-$(RM) $(RMOPT) fnmtool$(_EXE)
+	-$(RM) $(RMOPT) fnmrfc2ftn$(_EXE)
+	-$(RM) $(RMOPT) fnmtool.1.gz

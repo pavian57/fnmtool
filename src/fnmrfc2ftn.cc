@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 	log = new CLog(cfg->s_Log);
 	log->intro(prgname);
 	
+#ifdef LINUX
 	ofstream myfile;
 	int fo;
   if (cfg->debug) {  
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
 		if (fo != -1) 
 	    myfile.open(tmpname); // ("/tmp/example.txt");
   }
-
+#endif
 	
 	
 	
@@ -63,24 +64,26 @@ int main(int argc, char *argv[])
   istream_iterator<char> it(cin);
   istream_iterator<char> end;
   string results(it, end);
-  
+#ifdef LINUX  
   if (cfg->debug) {
     myfile << "Sender->" << sender << ":" <<  endl;
     myfile << "Recipient->" << recipient << ":" <<   endl;
     myfile << "program->" << basename(prgname.c_str())<< ":" << endl;
     myfile << "results->" << results << ":" <<  endl;
   }
+#endif  
   rc = rfcmail.parse(sender,recipient,results);
   rcode.str("");
   rcode << rc ;
 	logstr="parse mail returned=";
 	logstr += rcode.str();
   log->add(2,logstr);
+#ifdef LINUX  
 	if (cfg->debug) {
 		if (fo != -1)
 	    myfile << "rcode->" << rcode << ":" <<  endl;
   }
-  
+#endif  
 
   if (rc==0) {
     rc = rfcmail.sendmail();
@@ -98,9 +101,11 @@ int main(int argc, char *argv[])
 	log->outro();
   delete log;
   delete cfg;
+#ifdef LINUX  
   if (cfg->debug) {  
 		if (fo != -1)
    		myfile.close();
   }
+#endif  
   
 }
