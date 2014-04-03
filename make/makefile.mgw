@@ -9,6 +9,7 @@ include makefile.inc
 
 
 CXX=c++
+CXX=i586-mingw32msvc-g++
 _CXX=.cc
 OSTYPE=WIN
 

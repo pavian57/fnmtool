@@ -348,3 +348,4 @@ bool CMask::checkAttr(string s_Flags,dword attr)
 #define MSGURQ     0x8000
 
 */
+

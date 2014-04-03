@@ -1,2 +1,2 @@
-#define PRGNAME "rfc2ftn/LNX"
-#define VERSION "0.01"
+#define PRGNAME "rfc2ftn"
+#define VERSION "1.00"
