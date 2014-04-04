@@ -29,8 +29,8 @@ class CConfig
 	public:
 		CConfig();
 		CFtnAddr F_Home;
-		int	silent;
-		int debug;
+		int	silent = 0;
+		int	debug = 0;
 		string s_Home;
 		string s_Netmail;
 		string s_Outbound;
