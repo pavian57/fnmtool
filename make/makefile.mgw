@@ -7,16 +7,26 @@
 include ../../huskybse/huskymak.mgw
 include makefile.inc
 
+ifeq ($(OS),Windows_NT)
+    #Windows stuff
+    CXX=c++
+else
+    #Linux stuff
+    CXX=i586-mingw32msvc-g++    
+endif
 
-CXX=c++
-CXX=i586-mingw32msvc-g++
+
+
 _CXX=.cc
 OSTYPE=WIN
+
+GIT_VERSION := $(shell git describe --tags --long --dirty)
+CDEFS +=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\" $(ADDCDEFS)
 
 # includes directories
 CINCL	+= -IC:\MinGW\include -I$(H_DIR) -I../../huskylib/ -I../../smapi/
 
-CDEFS = -Wall -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
+CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
 
 # libraries need to build binary file
                          
