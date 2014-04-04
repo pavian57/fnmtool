@@ -235,7 +235,7 @@ int CRfcmail::sendmail()
 
     s_Kludges+=buf;
 
-    sprintf(buf,"\001PID: %s %s",RFC2FTN,RFC2FTNVERSION);
+    sprintf(buf,"\001PID: %s %s",RFC2FTN,VERSION);
     s_Kludges+=buf;
     sprintf(buf,"\001CHRS: %s",cfg->s_CharsetFtn.c_str());
     s_Kludges+=buf;    

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stdexcept>
-#endif
 #ifdef __GNUC__
 #include <cstdio>
 #else
@@ -32,12 +31,12 @@ int CLog::intro(string s_Prg)
 	  if (!s_Prg.find("ftn2rfc"))
       fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);
     else
-      fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,RFC2FTNVERSION ); 
+      fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,VERSION ); 
   } else {
     if (!s_Prg.find("ftn2rfc"))
       fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);
     else
-      fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,RFC2FTNVERSION ); 
+      fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,VERSION ); 
   }
 	return 0;
 }

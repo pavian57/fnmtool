@@ -1,9 +1,8 @@
 #define PRGNAME "fnmtool"
-#define VERSION "1.00"
 #define RFC2FTN "fnmrfc2ftn"
-#define RFC2FTNVERSION "1.00"
+#define VERSION "v1.0-0-g422c238-dirty"
 #ifdef UNIX
   #define OS "lnx"
 #elif WIN
-  #define OS "win" 
+  #define OS "win"
 #endif

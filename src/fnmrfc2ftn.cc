@@ -12,7 +12,7 @@
 #include "log.h"
 #include "global.h"
 #include "rfcmail.h"
-#include "rfc2ftnversion.h"
+#include "version.h"
 
 
 using namespace std;

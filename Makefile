@@ -26,11 +26,12 @@ else
   LIBS=-L$(LIBDIR) -lsmapi -lhusky
 endif
 
+GIT_VERSION := $(shell sh makeversion.sh)
 CDEFS=-D$(OSTYPE) $(ADDCDEFS)
 
 #CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
 
-#CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
+CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
 
 #CDEFS += -DCONFIGDIR=\"fnmtool.cfg\" 
 
