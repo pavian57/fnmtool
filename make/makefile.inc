@@ -18,7 +18,7 @@ VERH	= $(VERMAJOR).$(VERMINOR)
 VER	= $(VERH).$(VERPATCH)
 
 # Sources directory
-_SRC_DIR= ../src/
+SRC_DIR= ../src/
 # Headers directory
 H_DIR	= ../h/
 

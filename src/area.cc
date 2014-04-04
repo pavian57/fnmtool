@@ -1,13 +1,10 @@
-#include <stdio.h>
-#ifndef IS_OLDGCC
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 #ifdef __GNUC__
 #include <cstring>
+#include <cstdio>
 #else
 #include <string.h>
+#include <stdio.h>
 #endif
 using namespace std;
 #include "msg.h"

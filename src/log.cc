@@ -1,7 +1,5 @@
-#ifndef IS_OLDGCC
 #include <iostream>
-#else
-#include <iostream.h>
+#include <stdexcept>
 #endif
 #ifdef __GNUC__
 #include <cstdio>
@@ -11,8 +9,6 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <libgen.h>
-#include <stdexcept>
-//#include <cerrno>
 #include "log.h"
 #include "version.h"
 

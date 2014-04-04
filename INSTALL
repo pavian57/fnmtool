@@ -1,10 +1,17 @@
-how to install lxtrack
+How To install fnmtool
 ======================
 
-1. lxtrack requires the SMAPI to access fido messagebases
-2. copy the source into the same directory tree as smapi:
-		
-	/usr/src/packages/ 	-> smapi/
-				-> lxtrack/
-3a. if you want to have a debug release, do a make debug
-3b. otherwise a make release
+1. fnmtool fits into the husky system and requires smapi and husky libs
+
+2. copy the source into the husky directory.
+
+3. Edit Makefile and add you config file
+    CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
+
+4. Adjust ../huskymak.cfg as usual
+
+5. make && make install
+
+6. if cross compiling with mingw32, i had to add iconv manually.
+
+7. Use mingw32 to build with windows, you need the whole husky bundle as with linux.

@@ -1,10 +1,6 @@
-#ifndef IS_OLDGCC
 #include <iostream>
 #include <sstream>
 #include <string>
-#else
-#include <iostream.h>
-#endif
 #ifdef __GNUC__
 #include <cstdio>
 #include <cerrno>
@@ -20,11 +16,6 @@
 #include <unistd.h>
 #include "fnmsmtp.h"
 #include "global.h"
-
-
-
-
-
 
 
 using namespace std;

@@ -10,12 +10,13 @@ include ../huskymak.cfg
 endif
 
 SRC_DIR = src$(DIRSEP)
+H_DIR = h$(DIRSEP)
 
 ifeq ($(DEBUG), 1)
-  CFLAGS = -Ih -I$(INCDIR) $(DEBCFLAGS) $(WARNFLAGS)
+  CFLAGS = -I$(H_DIR) -I$(INCDIR) $(DEBCFLAGS) $(WARNFLAGS)
   LFLAGS = $(DEBLFLAGS)
 else
-  CFLAGS = -Ih -I$(INCDIR) $(OPTCFLAGS) $(WARNFLAGS)
+  CFLAGS = -I$(H_DIR) -I$(INCDIR) $(OPTCFLAGS) $(WARNFLAGS)
   LFLAGS = $(OPTLFLAGS)
 endif
 
@@ -25,16 +26,13 @@ else
   LIBS=-L$(LIBDIR) -lsmapi -lhusky
 endif
 
-CC=g++
+CDEFS=-D$(OSTYPE) $(ADDCDEFS)
 
-#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\" $(ADDCDEFS)
+#CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
 
-#CDEFS = -D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\" $(ADDCDEFS)
+#CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
 
-#CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"/home/ruedi/work/src/fidonet/husky/fnmtool/fnmtool.cfg\" $(ADDCDEFS)
-
-
-CDEFS=-D$(OSTYPE) -DCONFIGDIR=\"fnmtool.cfg\"  $(ADDCDEFS)
+#CDEFS += -DCONFIGDIR=\"fnmtool.cfg\" 
 
 default: all
 

@@ -1,10 +1,6 @@
-#ifndef IS_OLDGCC
 #include <iostream>
 #include <sstream> // for ostringstream
 #include <algorithm>
-#else
-#include <iostream.h>
-#endif
 #ifdef __GNUC__
 #include <cstdio>
 #else
@@ -16,7 +12,6 @@
 extern "C"
 {
 #include <smapi/msgapi.h>
-//#include <quickmail.h>
 }
 #include "ftnaddr.h"
 #include "mask.h"

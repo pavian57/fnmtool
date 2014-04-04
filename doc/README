@@ -1,0 +1,39 @@
+				FidoNetMailTOOL
+			--------------------
+
+
+
+  I. Introduction
+ II. Config file
+III. Portability Issues
+IV.  additional Features
+
+I. Introduction
+===============
+
+fnmtool was designed to be compatible NetMgr-Clone for Linux. The current
+version is somewhere around 1.0
+
+II. Config file
+===============
+
+fnmtool uses the same config-format as Netmgr. Refer to Netmgr documentation for
+details.
+
+III. Portability Issues
+=======================
+
+The code is written almost exclusively using ANSI C++, so it shouldn't be too
+hard to port it to any system which has a C++ compiler conforming to ANSI.
+
+IV. additional Features
+=======================
+
+following Actions have been added:
+			pingpong	a function, that ansers a request to a PING received by email.
+			email, scans the you natmail and sends the mail to your wahtever mail account with smtp.
+
+With fnmrfc2ftn, you may send mail back from your email acount to fidonet.
+May only work if you have your own mailsystem running, tested with postfix.
+
+

@@ -10,3 +10,5 @@ movemail
 rewrite
 semaphore
 display
+pingpong
+email

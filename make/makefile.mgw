@@ -38,7 +38,7 @@ all:	programs
 
 programs: $(PROGRAMS)
 
-%$(_OBJ): $(_SRC_DIR)%$(_CXX)   
+%$(_OBJ): $(SRC_DIR)%$(_CXX)   
 	@echo Compiling $<
 	@$(CXX) $(CFLAGS) $(CDEFS) $(CINCL) $(OBJOPT) $<
 
