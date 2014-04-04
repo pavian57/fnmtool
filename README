@@ -1,4 +1,4 @@
-				FidoNetMailTOOL
+			FidoNetMailTOOL
 			--------------------
 
 
@@ -30,8 +30,8 @@ IV. additional Features
 =======================
 
 following Actions have been added:
-			pingpong	a function, that ansers a request to a PING received by email.
-			email, scans the you natmail and sends the mail to your wahtever mail account with smtp.
+			pingpong:	a function, that answers a request to a PING received by fidonet mail. 
+			email:	scans your fidonet netmail and sends the mail to your whatever mail account with smtp. so you can read your netmail on your smartphone
 
 With fnmrfc2ftn, you may send mail back from your email acount to fidonet.
 May only work if you have your own mailsystem running, tested with postfix.
