@@ -29,7 +29,7 @@ endif
 GIT_VERSION := $(shell git describe --tags --long --dirty)
 CDEFS=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\" $(ADDCDEFS)
 
-#CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
+CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
 
 #CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
 

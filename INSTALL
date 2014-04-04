@@ -15,3 +15,51 @@ How To install fnmtool
 6. if cross compiling with mingw32, i had to add iconv manually.
 
 7. Use mingw32 to build with windows, you need the whole husky bundle as with linux.
+
+
+8. install fnmtool
+
+8.1 install exe, set premission to your needs
+
+8.2 edit fnmtool.cfg, set your actions
+
+8.3	copy fnmtool.cfg to the place you configured
+
+8.4 run program after tossing mail.
+
+
+
+9. Install fnmrfc2ftn.
+
+9.1. add this below to master.cf (postfix)
+
+tofido unix - n n - - pipe
+        flags=F user=fido argv=/usr/local/bin/fnmrfc2ftn ${sender} ${recipient}
+
+9.2  add the following to transport (postfix)
+z1                      tofido:
+.z1                     tofido:
+z2                      tofido:
+.z2                     tofido:
+z3                      tofido:
+.z3                     tofido:
+z4                      tofido:
+.z4                     tofido:
+z5                      tofido:
+.z5                     tofido:
+z6											tofido:
+.z6											tofido:
+fidonet									tofido:
+.fidonet								tofido:
+fidonet.org             tofido:
+.fidonet.org            tofido:
+
+9.3 run 
+	
+	postmaster hash:transport
+
+9.4 be sure, that main.cf (postfix) has the following entry
+	
+	transport_maps = hash:/etc/postfix/transport
+
+10. to be continued!
