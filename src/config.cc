@@ -17,9 +17,14 @@ using namespace std;
 
 bool CConfig::openConfig(string path)
 {
+
 	cfgFile=fopen(path.c_str(), "r");
-	if (cfgFile!=NULL) return false;
-	else return true;
+	if (cfgFile==NULL) {
+		return false;
+	} else {
+		return true;
+	}
+	return false; 
 }
 
 bool CConfig::closeConfig()
@@ -119,11 +124,11 @@ CConfig::CConfig()
 	param parm;
 	string s_Line;
 	string s_Token;
-	
 	int scn=-1, msk=-1, actn=-1, rfcfido=-1;
   s_CharsetFtn = "LATIIN1";
   s_CharsetRfc = "UTF-8";
-        	
+	debug = 0;
+	silent = 0;
 	openConfig(CONFIGDIR);
 	while ((s_Line=getLine())!="\n") 
 	{
