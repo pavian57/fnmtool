@@ -26,8 +26,16 @@ else
   LIBS=-L$(LIBDIR) -lsmapi -lhusky
 endif
 
+GIT := $(shell which git)
+
+ifneq ($(GIT),)
 GIT_VERSION := $(shell git describe --tags --long --dirty)
-CDEFS=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\" $(ADDCDEFS)
+$(shell echo $(GIT_VERSION) > BUILDVERSION)
+else 
+GIT_VERSION := $(shell cat BUILDVERSION)
+endif
+
+CDEFS=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\"  $(ADDCDEFS)
 
 CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
 
