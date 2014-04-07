@@ -17,9 +17,9 @@ int CLog::intro()
 	time(&tm);
 	dt=gmtime(&tm);
 	if (logopen) 
-    fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);
+    fprintf(f_log, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900, PRGNAME, VERSION);
   else 
-    fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);  
+    fprintf(stderr, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900, PRGNAME, VERSION);  
 	return 0;
 }
 
@@ -29,14 +29,14 @@ int CLog::intro(string s_Prg)
 	dt=gmtime(&tm);
 	if (logopen) {
 	  if (!s_Prg.find("ftn2rfc"))
-      fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);
+      fprintf(f_log, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900, PRGNAME, VERSION);
     else
-      fprintf(f_log, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,VERSION ); 
+      fprintf(f_log, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900,RFC2FTN ,VERSION ); 
   } else {
     if (!s_Prg.find("ftn2rfc"))
-      fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900, PRGNAME, VERSION);
+      fprintf(stderr, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900, PRGNAME, VERSION);
     else
-      fprintf(stderr, "---------- %i.%i.%i %s %s\n", dt->tm_mday+1, dt->tm_mon, dt->tm_year+1900,RFC2FTN ,VERSION ); 
+      fprintf(stderr, "---------- %02i.%02i.%i %s %s\n", dt->tm_mday, dt->tm_mon+1, dt->tm_year+1900,RFC2FTN ,VERSION ); 
   }
 	return 0;
 }
