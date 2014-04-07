@@ -24,10 +24,32 @@ void printhelp()
   exit(1);
 }
 
+
+int FileExist( const std::string& Name )
+{
+
+#ifndef __linux__
+    struct _stat buf;
+    return  _stat( Name.c_str(), &buf );
+#else
+    struct stat buf;
+    return stat( Name.c_str(), &buf );
+#endif
+    
+}
+
 int main(int argc, char** argv)
 {
 	int result = 0;
+	if (FileExist(CONFIGDIR) == -1) {
+		cerr << "Config File " << CONFIGDIR << " not found" << endl;
+		exit(1);
+	}
 	cfg = new CConfig;
+
+	if (cfg == NULL) {
+		return 1;
+	}
 	for (int i = 1; i < argc; i++) {
 	  if (strcmp(argv[1],"-h")==0 || strcmp(argv[1],"-?")==0 || strcmp(argv[1],"--help")==0)
      printhelp();
