@@ -30,14 +30,13 @@ GIT := $(shell which git)
 
 ifneq ($(GIT),)
 GIT_VERSION := $(shell git describe --tags --long --dirty)
-$(shell echo $(GIT_VERSION) > BUILDVERSION)
 else 
-GIT_VERSION := $(shell cat BUILDVERSION)
+GIT_VERSION := "install git to have version number"
 endif
 
 CDEFS=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\"  $(ADDCDEFS)
 
-CDEFS += -DCONFIGDIR=\"/usr/local/etc/fido/fnmtool.cfg\"
+CDEFS += -DCONFIGDIR=\"$(DIRSEP)usr$(DIRSEP)local$(DIRSEP)etc$(DIRSEP)fido$(DIRSEP)fnmtool.cfg\"
 
 #CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
 
