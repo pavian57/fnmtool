@@ -27,7 +27,6 @@ else
 endif
 
 GIT := $(shell which git)
-
 ifneq ($(GIT),)
 GIT_VERSION := $(shell git describe --tags --long --dirty)
 else 
@@ -39,8 +38,6 @@ CDEFS=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\"  $(ADDCDEFS)
 CDEFS += -DCONFIGDIR=\"$(DIRSEP)usr$(DIRSEP)local$(DIRSEP)etc$(DIRSEP)fido$(DIRSEP)fnmtool.cfg\"
 
 #CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
-
-#CDEFS += -DCONFIGDIR=\"fnmtool.cfg\" 
 
 default: all
 
