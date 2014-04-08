@@ -8,6 +8,9 @@
 # DLLSUFFIX  dinamic linking library suffix (compiler ID or empty)
 # O, B, L, H prefixes to use with names of objects, binaries, libraries and headers respectively
 
+_CXX=.cc
+
+
 LIBNAME = fnmtool
 
 # Version

@@ -9,24 +9,28 @@ include makefile.inc
 
 ifeq ($(OS),Windows_NT)
     #Windows stuff
+		GIT := $(shell where git 2>NULL)
     CXX=c++
 else
     #Linux stuff
+		GIT := $(shell which git)
     CXX=i586-mingw32msvc-g++    
 endif
 
-
-
-_CXX=.cc
 OSTYPE=WIN
 
+ifneq ($(GIT),)
 GIT_VERSION := $(shell git describe --tags --long --dirty)
+else 
+GIT_VERSION := "install git to have version number"
+endif
+
 CDEFS +=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\" $(ADDCDEFS)
 
 # includes directories
 CINCL	+= -IC:\MinGW\include -I$(H_DIR) -I../../huskylib/ -I../../smapi/
 
-CDEFS += -DCONFIGDIR=\"fnmtool.cfg\"
+CDEFS += -DCONFIGDIR=\"c:\etc\fido\fnmtool.cfg\"
 
 # libraries need to build binary file
                          
