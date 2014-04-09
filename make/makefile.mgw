@@ -30,7 +30,7 @@ CDEFS +=-D$(OSTYPE) -DVERSION=\"$(GIT_VERSION)\" $(ADDCDEFS)
 # includes directories
 CINCL	+= -IC:\MinGW\include -I$(H_DIR) -I../../huskylib/ -I../../smapi/
 
-CDEFS += -DCONFIGDIR=\"c:\etc\fido\fnmtool.cfg\"
+CDEFS += -DCONFIGDIR=\"c:/etc/fido/fnmtool.cfg\"
 
 # libraries need to build binary file
                          
