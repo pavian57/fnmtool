@@ -2,6 +2,7 @@
 #define _AREA_H_
 #include <vector>
 #include <string>
+#include <algorithm>
 #ifdef IS_NOTGCC
 #include <stdio.h>
 #else

@@ -176,6 +176,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
 
                     char number[6];
                     sprintf(number, "%lu", MsgGetCurMsg(a_Area));
+										transform(type.begin(), type.end(), type.begin(), ::tolower);
 
                     if (cfg->debug)
                     {
