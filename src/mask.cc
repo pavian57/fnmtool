@@ -92,12 +92,11 @@ bool CMask::operator==(const CMask& msk)
 	if (s_Recipient=="*") rcpMatch=true;
 	
 	if (F_From == msk.F_From) frmMatch=true;
-	if (F_From.zone == 0 || F_From.net ==0) frmMatch=true;
-	if (F_From =="*") frmMatch=true;
-	
+	if ((F_From.zone == 0) & (F_From.net ==0) & (F_From.node == 0) & (F_From.point == 0)) frmMatch=true;	
+
 	if (F_To == msk.F_To) toMatch=true;
-	if (F_To.zone == 0 || F_To.net ==0) toMatch=true;
-	
+	if ((F_To.zone == 0) & (F_To.net ==0) & (F_To.node == 0) & (F_To.point == 0)) toMatch=true;	
+
 	if (msk.s_Subject == s_Subject) subjMatch=true;
 	if (s_Subject=="*") subjMatch=true;
 	
