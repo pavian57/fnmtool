@@ -14,7 +14,7 @@ _CXX=.cc
 
 # Object files: programs
 
-OLDFILES  := *~ $(SRC_DIR)*~ $(H_DIR)*~ make/*~ 
+OLDFILES  := *~ $(SRC_DIR)*~ $(H_DIR)*~ make/*~ doc/*~ 
 
 OBJS = 	msgid$(_OBJ) action$(_OBJ) area$(_OBJ) config$(_OBJ) ftnaddr$(_OBJ)	\
 			 	global$(_OBJ) log$(_OBJ) mask$(_OBJ) msg$(_OBJ)	pkt$(_OBJ)	\
