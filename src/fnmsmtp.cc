@@ -124,42 +124,41 @@ int CSmtp::sendmail()
   i_ReturnCode = 0;
   if (i_Port < 0) i_Port = 25;
   if (s_MailServer.empty()) s_MailServer = "localhost";
-	
-  
-cerr <<  "s_MailServer" << s_MailServer << endl;
-cerr << "open_con" << endl; 
 	i_ReturnCode = open_con();
   if (i_ReturnCode != 0) {
-cerr << "open_con failes" << endl;  
-    //Problem
+		return i_ReturnCode;
   }
   i_ReturnCode = receive();
 	if (i_ReturnCode != 220) {
-cerr << "open_con failes" << endl;  
-		//Problem 
+		s_ErrorMsg = s_ServerMessage;
+		return i_ReturnCode;
 	}
   send_data("HELO "+s_LocalHostname+"\r\n");
 	i_ReturnCode = receive();
   if (i_ReturnCode != 250) {
-    //Problem
+ 		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
  
 	send_data("MAIL FROM:  "+s_MailFrom+"\r\n");
   i_ReturnCode = receive();
   if (i_ReturnCode != 250) {
-    //Problem
+		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
 
 	send_data("RCPT TO:  "+s_MailTo+"\r\n");
   i_ReturnCode = receive();
   if (i_ReturnCode != 250) {
-    //Problem
+		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
 
   send_data("DATA\r\n");
   i_ReturnCode = receive();
   if (i_ReturnCode != 354) {
-    //Problem
+		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
 	send_data("From: "+s_MailFrom+CRLF);
 	send_data("To: "+s_MailTo+CRLF);
@@ -172,18 +171,20 @@ cerr << "open_con failes" << endl;
 
   i_ReturnCode = receive();
   if (i_ReturnCode != 250) {
-    //Problem
+		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
 
   send_data("QUIT"+CRLF);
 	i_ReturnCode = receive();
   if (i_ReturnCode != 221) {
-    //Problem
+		s_ErrorMsg = s_ServerMessage;
+    return i_ReturnCode;
   }
 
 	i_ReturnCode = close_con();
   if (i_ReturnCode != 0) {
-    //Problem
+    return i_ReturnCode;
   }
   return i_ReturnCode;
 }
@@ -197,7 +198,7 @@ int CSmtp::open_con()
   //determine local host name
   i_ReturnCode = gethostname(local_hostname, sizeof(local_hostname));
   if (i_ReturnCode == -1) {
-     strcpy(local_hostname, "myhost.domain");
+     strcpy(local_hostname, "myhost");
   }
  	s_LocalHostname = local_hostname;
 
@@ -208,7 +209,7 @@ int CSmtp::open_con()
             s_ErrorMsg = "Could not create socket";
 			i_ReturnCode = -1;
         }
-	} else    {   /* OK , nothing */  }
+	} else    {   /* nada  */  }
 
     //setup address structure
 	if(inet_addr(s_MailServer.c_str()) == INADDR_NONE) {
@@ -278,7 +279,7 @@ int CSmtp::send_data(string str)
 		s_ErrorMsg = "Send failed";
     return i_ReturnCode;
 	}
-//	if (cfg->debug)
+	if (cfg->debug)
 		cerr << "rc=" << i_ReturnCode << ": send_data=" << str;
 
 	return i_ReturnCode;
@@ -301,7 +302,7 @@ int CSmtp::receive()
   s_ServerMessage = recvData;
 	int pos =  s_ServerMessage.find(" ");
   istringstream ( s_ServerMessage.substr(0,pos) ) >> i_ReturnCode;
-//	if (cfg->debug)
+	if (cfg->debug)
 		cerr << "rc=" << i_ReturnCode << ": recvData=" << recvData << ": lenRead=" << lenRead <<  endl;
 
   return i_ReturnCode;
