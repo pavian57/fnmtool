@@ -319,6 +319,15 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         stopwithmsg = true;
                         break;
                     }
+                    if (type=="twit")
+                    {
+                        CTwitAction TempAction;
+                        TempAction.Area=a_Area;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.run();
+                        stopwithmsg = true;
+                        break;
+                    }
                     if (type=="ignore")
                     {
                         stopwithmsg = true;

@@ -41,6 +41,13 @@ class CDeleteAction:public CAction
 		int run();
 };
 
+class CTwitAction:public CAction
+{
+	public:
+		int run();
+};
+
+
 class CFileAction:public CAction
 {
 	public:

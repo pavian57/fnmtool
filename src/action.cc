@@ -760,3 +760,94 @@ int CDeleteAction::run()
     return 0;
 }
 
+int CTwitAction::run()
+{
+		CMsg SrcMsg;
+    CMsg DestMsg;
+    /* open messages */
+    SrcMsg.Open(msgnum, Area);
+    DestMsg.New(Area);
+    if (cfg->debug) cerr << "CTwitAction, created message" << endl;
+    /* Write Headers */
+
+    DestMsg.F_From=SrcMsg.F_To;
+    DestMsg.F_To=SrcMsg.F_From;
+
+    DestMsg.F_To=SrcMsg.F_From;
+    DestMsg.s_From=SrcMsg.s_To;
+    DestMsg.s_To=SrcMsg.s_From;
+    DestMsg.s_Subject=SrcMsg.s_Subject;
+    DestMsg.d_Attr= MSGLOCAL|MSGPRIVATE|MSGKILL;
+
+    string s_Kludges;
+    if (cfg->debug) cerr << "writing kludges" << endl;
+    /* write fmpt, topt, intl info */
+    char *buf;
+    buf = new char[50];
+
+    sprintf(buf, "\001INTL %i:%i/%i %i:%i/%i",
+            DestMsg.F_To.zone, DestMsg.F_To.net, DestMsg.F_To.node,
+            DestMsg.F_From.zone, DestMsg.F_From.net, DestMsg.F_From.node);
+    s_Kludges+=buf;
+
+    if (DestMsg.F_From.point!=0)
+    {
+        sprintf(buf, "\001FMPT %i", DestMsg.F_From.point);
+        s_Kludges+=buf;
+    }
+    if (DestMsg.F_To.point!=0)
+    {
+        sprintf(buf, "\001TOPT %i", DestMsg.F_To.point);
+        s_Kludges+=buf;
+    }
+
+
+    if (DestMsg.F_From.point == 0)
+        sprintf(buf,"\001MSGID: %i:%i/%i %08lx",DestMsg.F_From.zone, DestMsg.F_From.net, DestMsg.F_From.node ,createMsgId());
+    else
+        sprintf(buf,"\001MSGID: %i:%i/%i.%i %08lx",DestMsg.F_From.zone, DestMsg.F_From.net, DestMsg.F_From.node,DestMsg.F_From.point ,createMsgId());
+
+    s_Kludges+=buf;
+
+    sprintf(buf,"\001PID: %s %s",PRGNAME,VERSION);
+    s_Kludges+=buf;
+
+    DestMsg.s_Ctrl+=s_Kludges;
+
+    if (cfg->debug) cerr  << "wrote kludges!" << endl;
+    delete [] buf;
+
+    buf = new char[200]();
+
+    sprintf(buf,"Hello %s.\r\r",SrcMsg.s_From.c_str());
+    sprintf(buf+strlen(buf),"Your message has been succesfully ignored and deleted\r\r\r");
+
+    if (cfg->debug) cerr  << "CTwitAction Message=\n" << buf<< endl;
+
+    DestMsg.s_MsgText=buf;
+
+    if (cfg->debug) cerr  << "CTwitAction writing messageText" << endl;
+    DestMsg.Write();
+
+    //sprintf(buf), " %i:%i/%i.%i", SrcMsg.F_From.zone, SrcMsg.F_From.net, SrcMsg.F_From.node, SrcMsg.F_From.point);
+
+    stringstream node;//create a stringstream
+    node  << SrcMsg.F_From ;
+    string logstr="CTwitAction wrote message to=";
+    logstr += node.str();
+
+    if (!cfg->silent) cerr << logstr << endl;
+    log->add(2,logstr);
+    DestMsg.Close();
+
+    SrcMsg.d_Attr = SrcMsg.d_Attr | MSGREAD;
+    SrcMsg.read = true;
+    SrcMsg.WriteAttr();
+    SrcMsg.Delete(Area);
+    SrcMsg.deleted=true;
+//	SrcMsg.Close();
+
+    delete [] buf;
+    return 0;
+}
+
