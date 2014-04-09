@@ -148,7 +148,7 @@ if (mydbg == 1) cerr << "Subject line->" << s_Subject << ":" << endl;
     }
     int indexcr = line.find("\r",pos);
     int indexlf = line.find("\n",pos);
-    index = (indexcr,indexlf);
+    index = max(indexcr,indexlf);
     cfg->s_CharsetRfc.assign(line,0,index);
     line.clear();
 if (mydbg == 1) cerr << "RFC-Charset=" << cfg->s_CharsetRfc << ":" << endl;    
