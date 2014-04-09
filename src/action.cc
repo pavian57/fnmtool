@@ -68,7 +68,7 @@ int CFileAction::run()
     SrcMsg.WriteAttr();
     SrcMsg.Close();
     string logstr="Writing Message to File " + s_Filename;
-    if (!cfg->silent) cout << logstr << endl
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2,logstr);
     fclose(f_txtFile);
     return 0;
@@ -104,7 +104,7 @@ int CHdrFileAction::run()
       SrcMsg.WriteAttr();
       SrcMsg.Close();
       string logstr="Writing Header to File " + s_Filename;
-			if (!cfg->silent) cout << logstr << endl
+			if (!cfg->silent) cout << logstr << endl;
       log->add(2,logstr);
       fclose(f_txtFile);
       return 0;
@@ -345,7 +345,7 @@ int CCopyAction::run()
     string logstr="Copied Message to Area " + destarea;
     SrcMsg.read = true;
     SrcMsg.WriteAttr();
-    if (!cfg->silent) cout << logstr << endl
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2,logstr);
     DestMsg.Close();
     SrcMsg.Close();
@@ -688,7 +688,7 @@ int CDisplayAction::run()
   SrcMsg.WriteAttr();
   SrcMsg.Close();
   string logstr="Writing Message to screen";
-	if (!cfg->silent) cout << logstr << endl
+	if (!cfg->silent) cout << logstr << endl;
   log->add(2,logstr);
   return 0;
 }
@@ -704,7 +704,7 @@ int CSemaphoreAction::run()
     SrcMsg.WriteAttr();
     SrcMsg.Close();
     string logstr="Semaphore "+param +" written ";
-		if (!cfg->silent) cout  << logstr << endl
+		if (!cfg->silent) cout  << logstr << endl;
     log->add(2,logstr);
     fclose(f_semFile);
     return 0;
