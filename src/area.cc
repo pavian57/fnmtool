@@ -311,6 +311,8 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     {
                         CSemaphoreAction TempAction;
                         TempAction.param=RestParam;
+                        TempAction.Area=a_Area;
+                        TempAction.msgnum=MsgGetCurMsg(a_Area);
                         TempAction.run();
                     }
                     if (type=="delete")

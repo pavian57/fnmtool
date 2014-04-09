@@ -64,8 +64,11 @@ int CFileAction::run()
         if (SrcMsg.s_MsgText[i]=='\r') SrcMsg.s_MsgText[i]='\n';
     }
     fputs(SrcMsg.s_MsgText.c_str(),f_txtFile);
+    SrcMsg.read = true;
+    SrcMsg.WriteAttr();
     SrcMsg.Close();
     string logstr="Writing Message to File " + s_Filename;
+    if (!cfg->silent) cout << logstr << endl
     log->add(2,logstr);
     fclose(f_txtFile);
     return 0;
@@ -97,8 +100,11 @@ int CHdrFileAction::run()
       fputs(printAttr(SrcMsg.d_Attr).c_str(),f_txtFile);
       fputs("\n",f_txtFile);
       fputs("----------------------\n", f_txtFile);
+      SrcMsg.read = true;
+      SrcMsg.WriteAttr();
       SrcMsg.Close();
       string logstr="Writing Header to File " + s_Filename;
+			if (!cfg->silent) cout << logstr << endl
       log->add(2,logstr);
       fclose(f_txtFile);
       return 0;
@@ -301,7 +307,7 @@ int CPingPongAction::run()
     string logstr="PINGRequest: wrote message to=";
     logstr += node.str();
 
-    if (!cfg->silent) cerr << logstr << endl;
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2,logstr);
     DestMsg.Close();
 
@@ -337,6 +343,9 @@ int CCopyAction::run()
     DestMsg.sent=true;
     DestMsg.Write();
     string logstr="Copied Message to Area " + destarea;
+    SrcMsg.read = true;
+    SrcMsg.WriteAttr();
+    if (!cfg->silent) cout << logstr << endl
     log->add(2,logstr);
     DestMsg.Close();
     SrcMsg.Close();
@@ -364,7 +373,7 @@ int CMoveAction::run()
     DestMsg.sent=true;
     DestMsg.Write();
     string logstr="Moved message to Area " + destarea;
-    if (!cfg->silent) cerr << logstr << endl;
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2, logstr);
     SrcMsg.Delete(Area);
     SrcMsg.deleted=true;
@@ -569,24 +578,6 @@ int CEmailAction::run()
     sprintf(buf+strlen(buf),"Subject: %s\n",Message.s_Subject.c_str());
     sprintf(buf+strlen(buf),"---------------------\n");
 
-/*    char* token         = NULL;
-    char  delims[]      = "\1";
-    string ctrlline;
-    // During the first read, establish the char string and get the first token.
-    char *dup = strdup(Message.s_Ctrl.c_str());
-    token = strtok(dup,"\1");
-    // While there are any tokens left in "char_line"...
-    while (token != NULL)
-    {
-// seperate controllines
-        ctrlline = "@";
-        ctrlline += token;
-//write ctrl to buf
-        sprintf(buf+strlen(buf),"%s\n",ctrlline.c_str());
-        token = strtok(NULL, delims);
-    }
-    free(dup); */
-    
     converter conv(cfg->s_CharsetRfc, Message.s_Charset);
     if (cfg->debug) cerr  << "Message.s_Charset=" << Message.s_Charset << endl;
 
@@ -639,7 +630,7 @@ int CEmailAction::run()
   	  areaname.append(basename(s_Area.c_str()));
 	    out << "Sending message #: " << msgnum << " from Area: " << areaname << " to: " << mailto;
   	  log->add(2,out.str());
-	    if (!cfg->silent) cerr << out.str()  << endl;
+	    if (!cfg->silent) cout << out.str()  << endl;
 		}
 
     delete [] buf;
@@ -692,17 +683,28 @@ int CDisplayAction::run()
      if (SrcMsg.s_MsgText[i]=='\r') SrcMsg.s_MsgText[i]='\n';
   }
   cout << SrcMsg.s_MsgText << endl;
+//  SrcMsg.d_Attr = SrcMsg.d_Attr | MSGREAD;
+  SrcMsg.read = true;
+  SrcMsg.WriteAttr();
   SrcMsg.Close();
   string logstr="Writing Message to screen";
+	if (!cfg->silent) cout << logstr << endl
   log->add(2,logstr);
   return 0;
 }
 
 int CSemaphoreAction::run()
 {
+	 CMsg SrcMsg;
 	f_semFile=fopen(param.c_str(), "w");
   if (f_semFile != NULL) {
+  	SrcMsg.Open(msgnum, Area);
+//  SrcMsg.d_Attr = SrcMsg.d_Attr | MSGREAD;
+    SrcMsg.read = true;
+    SrcMsg.WriteAttr();
+    SrcMsg.Close();
     string logstr="Semaphore "+param +" written ";
+		if (!cfg->silent) cout  << logstr << endl
     log->add(2,logstr);
     fclose(f_semFile);
     return 0;
@@ -776,7 +778,7 @@ int CDeleteAction::run()
     SrcMsg.Delete(Area);
     SrcMsg.deleted=true;
     sprintf(logstr,"Deleted message #%d",msgnum);
-    if (!cfg->silent) cerr << logstr << endl;
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2, logstr);
     return 0;
 }
@@ -857,7 +859,7 @@ int CTwitAction::run()
     string logstr="CTwitAction wrote message to=";
     logstr += node.str();
 
-    if (!cfg->silent) cerr << logstr << endl;
+    if (!cfg->silent) cout << logstr << endl;
     log->add(2,logstr);
     DestMsg.Close();
 
