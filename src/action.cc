@@ -681,8 +681,21 @@ int CRewriteAction::run()
 
 int CDisplayAction::run()
 {
-    log->add(2, param);
-    return 0;
+	CMsg SrcMsg;
+	SrcMsg.Open(msgnum, Area);
+  cout << "From   : " << SrcMsg.s_From << "  " << SrcMsg.F_From.zone << ":" << SrcMsg.F_From.net << "/" << SrcMsg.F_From.node << "." << SrcMsg.F_From.point << endl;
+  cout << "To     : " << SrcMsg.s_To   << "  " << SrcMsg.F_To.zone << ":" <<  SrcMsg.F_To.net << "/" << SrcMsg.F_To.node<< "." <<  SrcMsg.F_To.point << endl;
+  cout << "Subject: " << SrcMsg.s_Subject << endl;
+  cout << "==========================================" <<  endl;
+  for (unsigned int i=0; i<SrcMsg.s_MsgText.length(); i++)
+  {
+     if (SrcMsg.s_MsgText[i]=='\r') SrcMsg.s_MsgText[i]='\n';
+  }
+  cout << SrcMsg.s_MsgText << endl;
+  SrcMsg.Close();
+  string logstr="Writing Message to screen";
+  log->add(2,logstr);
+  return 0;
 }
 
 int CSemaphoreAction::run()
