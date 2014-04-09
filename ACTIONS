@@ -1,16 +1,14 @@
-Currently implemented actions
------------------------------
+Currently implemented actions and tested
+----------------------------------------
 copy
 move
+delete
 file
 hdrfile
-bounce (temporary unavailable)
-packmail
-movemail
-rewrite
 semaphore
 display
 pingpong
 email
 twit
 
+all other not tested yet.

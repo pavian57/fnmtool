@@ -21,15 +21,17 @@ How To install fnmtool
 
 8.1 install exe, set premission to your needs
 
-8.2 edit fnmtool.cfg, set your actions
+8.2	use fnmtool.cfg from doc directory as a start
 
-8.3	copy fnmtool.cfg to the place you configured
+8.3 edit fnmtool.cfg, set your actions
 
-8.4 run program after tossing mail.
+8.4	copy fnmtool.cfg to the place you configured
+
+8.5 run program after tossing mail.
 
 
 
-9. Install fnmrfc2ftn.
+9. Install fnmrfc2ftn, fnmtool.cfg must exist
 
 9.1. add this below to master.cf (postfix)
 
