@@ -141,15 +141,17 @@ if (mydbg == 1) cerr << "Subject line->" << s_Subject << ":" << endl;
     pos = line.find("=");
     int index = line.find(" ",pos);
     line = line.substr(pos+1,index);
-    
+    pos = 0;
     int indexsc = line.find(";",pos);
+    if (indexsc != -1) {
+      line = line.substr(0,indexsc);
+    }
     int indexcr = line.find("\r",pos);
     int indexlf = line.find("\n",pos);
-
-    index = max(indexsc,max(indexcr,indexlf));
+    index = (indexcr,indexlf);
     cfg->s_CharsetRfc.assign(line,0,index);
     line.clear();
-if (mydbg == 1) cerr << "RFC-Charset->" << cfg->s_CharsetRfc << ":" << endl;    
+if (mydbg == 1) cerr << "RFC-Charset=" << cfg->s_CharsetRfc << ":" << endl;    
   }
 
                        
@@ -189,6 +191,7 @@ int CRfcmail::sendmail()
 
   CArea AArea;
   CMsg DestMsg;
+  int mydbg = 0; //mydbg special debug, reading from stdin, when running offline
   
   int rc = AArea.Open(cfg->s_Netmail);
   stringstream rcode ;//create a stringstream
@@ -243,7 +246,8 @@ int CRfcmail::sendmail()
     sprintf(buf,"\001RFC-Charset: %s",cfg->s_CharsetRfc.c_str());
     s_Kludges+=buf;    
     
-    
+    if (mydbg == 1) cerr << "RFC-Charset=" << cfg->s_CharsetRfc << ":" << endl;
+    if (mydbg == 1) cerr << "FTN-Charset=" << cfg->s_CharsetFtn << ":" << endl;  
     DestMsg.s_Ctrl += s_Kludges;
     DestMsg.s_Ctrl += s_Ctrl;    
     delete [] buf;
