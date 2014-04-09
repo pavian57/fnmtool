@@ -700,9 +700,17 @@ int CDisplayAction::run()
 
 int CSemaphoreAction::run()
 {
-    f_semFile=fopen(param.c_str(), "w");
+	f_semFile=fopen(param.c_str(), "w");
+  if (f_semFile != NULL) {
+    string logstr="Semaphore "+param +" written ";
+    log->add(2,logstr);
     fclose(f_semFile);
     return 0;
+  } else {
+    string logstr="Writing Semaphore " + param + " failed!";
+    log->add(2,logstr);
+  }
+  return -1;
 }
 
 /*int CEchoCopyAction::run()
