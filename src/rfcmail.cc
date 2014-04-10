@@ -142,18 +142,27 @@ if (mydbg == 1) cerr << "Subject line->" << s_Subject << ":" << endl;
     int index = line.find(" ",pos);
     line = line.substr(pos+1,index);
     pos = 0;
+if (mydbg == 1) cerr << "line=" << line << ":" << endl;    
     int indexsc = line.find(";",pos);
     if (indexsc != -1) {
       line = line.substr(0,indexsc);
     }
+if (mydbg == 1) cerr << "indexsemikolon=" << indexsc << ": line=" << line << ":" << endl;    
     int indexcr = line.find("\r",pos);
+    if (indexcr != -1) {
+      line = line.substr(0,indexcr);
+    }
+if (mydbg == 1) cerr << "indexcr=" << indexcr << ": line=" << line << ":" << endl;    
     int indexlf = line.find("\n",pos);
-    index = max(indexcr,indexlf);
-    cfg->s_CharsetRfc.assign(line,0,index);
+    if (indexlf != -1) {
+      line = line.substr(0,indexlf);
+    }
+if (mydbg == 1) cerr << "indexlf=" << indexlf << ": line=" << line << ":" << endl;    
+	if (!line.empty())
+     cfg->s_CharsetRfc.assign(line);
     line.clear();
-if (mydbg == 1) cerr << "RFC-Charset=" << cfg->s_CharsetRfc << ":" << endl;    
   }
-
+if (mydbg == 1) cerr << "RFC-Charset=" << cfg->s_CharsetRfc << ":" << endl;    
                        
   istringstream f(rawMail);
   int inmsg = 0;
