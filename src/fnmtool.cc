@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #ifdef __GNUC__
 #include <cstdio>
 #else
@@ -81,8 +82,19 @@ int main(int argc, char** argv)
 		else 
 		{
 		if (!cfg->silent) 
-		  cout  << "Scanning " << cfg->S_Scandir[i].A_Area.s_Path  << endl;
-		   cfg->S_Scandir[i].A_Area.Scan(cfg->O_Op, cfg->A_Action, cfg->S_Scandir[i].firstMask, cfg->S_Scandir[i].lastMask);
+      cout  << "Scanning " << cfg->S_Scandir[i].A_Area.s_Path  << endl;
+      int rc = cfg->S_Scandir[i].A_Area.Scan(cfg->O_Op, cfg->A_Action, cfg->S_Scandir[i].firstMask, cfg->S_Scandir[i].lastMask);
+      if (rc != 0) {
+        stringstream rcode ;//create a stringstream
+        rcode << rc ;
+        string logstr  = "Problem scanning ";
+        logstr += cfg->S_Scandir[i].A_Area.s_Path;
+        logstr += " last good message=";
+        logstr += rcode.str();
+        log->add(3, logstr);
+        if (!cfg->silent)
+          cout  << logstr  << endl;
+			}
 		   cfg->S_Scandir[i].A_Area.Close();
 		}
 	}

@@ -125,8 +125,8 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
 //        if (msgnum == 1) msgnum = MSGNUM_NEXT;
 
         if (result==-1)
-        {
-           msgnum++;
+        {  //get out of here, when no more messages to check
+          if (msgnum > MsgGetHighMsg(a_Area)) return MsgGetCurMsg(a_Area);
            continue;
         }
         stopwithmsg = false;
