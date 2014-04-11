@@ -125,7 +125,7 @@ CConfig::CConfig()
 	string s_Line;
 	string s_Token;
 	int scn=-1, msk=-1, actn=-1, rfcfido=-1;
-  s_CharsetFtn = "LATIIN1";
+  s_CharsetFtn = "LATIN1";
   s_CharsetRfc = "UTF-8";
 	debug = 0;
 	silent = 0;
