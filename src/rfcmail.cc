@@ -274,7 +274,7 @@ int CRfcmail::sendmail()
     DestMsg.Close(); 
     AArea.Close(); 
  
-  }  
+  } else return -1;
 
   return 0;
 }
