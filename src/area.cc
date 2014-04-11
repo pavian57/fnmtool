@@ -116,17 +116,18 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
     CMask actualMask;
     int result;
     vector<int> matches;
-    dword msgnum = 1;
+    dword msgnum = 0;
     bool stopwithmsg;
 
     while (MsgGetCurMsg(a_Area) != MsgGetHighMsg(a_Area))
     {
-        result=Message.Open(msgnum, a_Area);
-        if (msgnum == 1) msgnum = MSGNUM_NEXT;
+        result=Message.Open(++msgnum, a_Area);
+//        if (msgnum == 1) msgnum = MSGNUM_NEXT;
 
         if (result==-1)
         {
-            continue;
+           msgnum++;
+           continue;
         }
         stopwithmsg = false;
         
