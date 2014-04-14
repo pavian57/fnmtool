@@ -49,3 +49,16 @@ string printAttr (dword attr)
   
   return attrList;
 }
+
+int FileExist( const std::string& Name )
+{
+
+#ifndef __linux__
+    struct _stat buf;
+    return  _stat( Name.c_str(), &buf );
+#else
+    struct stat buf;
+    return stat( Name.c_str(), &buf );
+#endif
+    
+}
