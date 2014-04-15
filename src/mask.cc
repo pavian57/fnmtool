@@ -158,9 +158,10 @@ bool CMask::operator==(const CMask& msk)
 
 bool CMask::checkAttr(string s_Flags,dword attr)
 {
-  bool mand, result = false;
-  bool _MSGREAD, _MSGLOCAL, _MSGPRIVATE, _MSGCRASH, _MSGSENT, _MSGFILE, _MSGFWD  = true;
-  bool _MSGORPHAN, _MSGKILL, _MSGHOLD, _MSGFRQ, _MSGSCANNED, _MSGXX2, _MSGURQ, _MSGRRQ, _MSGCPT = true;
+  bool mand = false, result = false;
+  bool _MSGREAD = true, _MSGLOCAL = true, _MSGPRIVATE = true, _MSGCRASH = true, _MSGSENT = true;
+  bool _MSGFILE = true, _MSGFWD = true, _MSGORPHAN = true, _MSGKILL = true, _MSGHOLD = true;
+  bool _MSGFRQ = true, _MSGSCANNED = true, _MSGXX2 = true, _MSGURQ = true, _MSGRRQ = true, _MSGCPT = true;
 
   s_MsgFlags.clear();  
 	for (unsigned int i=0;i<s_Flags.size()-1;i+=2)
@@ -317,6 +318,11 @@ bool CMask::checkAttr(string s_Flags,dword attr)
 	}
   result = (_MSGREAD & _MSGLOCAL & _MSGPRIVATE & _MSGCRASH & _MSGSENT & _MSGFILE & _MSGFWD &	\
             _MSGORPHAN & _MSGKILL & _MSGHOLD & _MSGFRQ & _MSGSCANNED & _MSGXX2 & _MSGURQ & _MSGRRQ & _MSGCPT);
+  if (cfg->debug)
+    cerr << _MSGREAD << " : " <<  _MSGLOCAL << " : " <<  _MSGPRIVATE << " : " <<  _MSGCRASH << " : "	\
+         <<  _MSGSENT << " : " <<  _MSGFILE << " : " <<  _MSGFWD << " : " <<  _MSGORPHAN << " : "	\
+         <<  _MSGKILL << " : " <<  _MSGHOLD << " : " <<  _MSGFRQ << " : " <<  _MSGSCANNED << " : "	\
+         <<  _MSGXX2 << " : " <<  _MSGURQ << " : " <<  _MSGRRQ << " : " <<  _MSGCPT << " : " <<  endl;
 	return result;
 }
 
