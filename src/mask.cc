@@ -160,7 +160,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
 {
   bool mand, result = false;
   bool _MSGREAD, _MSGLOCAL, _MSGPRIVATE, _MSGCRASH, _MSGSENT, _MSGFILE, _MSGFWD  = true;
-  bool _SGORPHAN, _SGKILL, _SGHOLD, _SGFRQ, _SGSCANNED, _SGXX2, _SGURQ, _SGRRQ, _SGCPT = true;
+  bool _MSGORPHAN, _MSGKILL, _MSGHOLD, _MSGFRQ, _MSGSCANNED, _MSGXX2, _MSGURQ, _MSGRRQ, _MSGCPT = true;
 
   s_MsgFlags.clear();  
 	for (unsigned int i=0;i<s_Flags.size()-1;i+=2)
@@ -315,8 +315,8 @@ bool CMask::checkAttr(string s_Flags,dword attr)
       _MSGCPT = result;
     }
 	}
-  result = (_MSGREAD & _MSGLOCAL & _MSGPRIVATE & _MSGCRASH & _MSGSENT & _MSGFILE & _MSGFWD	\
-            _SGORPHAN & _SGKILL & _SGHOLD & _SGFRQ & _SGSCANNED & _SGXX2 & _SGURQ & _SGRRQ & _SGCPT);
+  result = (_MSGREAD & _MSGLOCAL & _MSGPRIVATE & _MSGCRASH & _MSGSENT & _MSGFILE & _MSGFWD &	\
+            _MSGORPHAN & _MSGKILL & _MSGHOLD & _MSGFRQ & _MSGSCANNED & _MSGXX2 & _MSGURQ & _MSGRRQ & _MSGCPT);
 	return result;
 }
 
