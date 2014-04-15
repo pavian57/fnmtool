@@ -32,11 +32,6 @@ int main(int argc, char** argv)
 		cerr << "Config File " << CONFIGDIR << " not found" << endl;
 		exit(1);
 	}
-	cfg = new CConfig;
-
-	if (cfg == NULL) {
-		return 1;
-	}
 	for (int i = 1; i < argc; i++) {
 	  if (strcmp(argv[1],"-h")==0 || strcmp(argv[1],"-?")==0 || strcmp(argv[1],"--help")==0)
      printhelp();
@@ -44,7 +39,13 @@ int main(int argc, char** argv)
     	cfg->silent = 1;
     if (strcmp(argv[i],"-d")==0)
       result = 1;    	
-   }
+  }
+	cfg = new CConfig(result);
+
+	if (cfg == NULL) {
+		return 1;
+	}
+
 	log = new CLog(cfg->s_Log);
 	if (result) cfg->debug = 1;
 

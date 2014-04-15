@@ -27,7 +27,7 @@ typedef struct
 class CConfig
 {
 	public:
-		CConfig();
+		CConfig(int dbg);
 		CFtnAddr F_Home;
 		int	silent;
 		int	debug;

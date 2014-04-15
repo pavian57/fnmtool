@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   recipient = argv[2];
 
   
-  cfg = new CConfig;
+  cfg = new CConfig(0);
 	log = new CLog(cfg->s_Log);
 	log->intro(prgname);
 	

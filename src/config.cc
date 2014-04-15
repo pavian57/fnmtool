@@ -119,7 +119,7 @@ CAddresslist::~CAddresslist()
 }
 
 
-CConfig::CConfig()
+CConfig::CConfig(int dbg)
 {
 	param parm;
 	string s_Line;
@@ -127,9 +127,10 @@ CConfig::CConfig()
 	int scn=-1, msk=-1, actn=-1, rfcfido=-1;
   s_CharsetFtn = "LATIN1";
   s_CharsetRfc = "UTF-8";
-	debug = 0;
+  debug = dbg;
 	silent = 0;
 	openConfig(CONFIGDIR);
+if (debug) cerr << "Dump of configfile " << CONFIGDIR << endl;			
 	while ((s_Line=getLine())!="\n") 
 	{
 		if (s_Line == "") continue;
@@ -140,43 +141,54 @@ CConfig::CConfig()
 		{
 			s_Home=parm.s_RestOfLine;
 			F_Home=const_cast<char*>(s_Home.c_str());
+if (debug) cerr << "home =" << s_Home << ": home=" << F_Home << ":" << endl;			
 		}
 		if (parm.s_Token=="netmail")
 		{
 			s_Netmail=parm.s_RestOfLine;
+if (debug) cerr << "netmail=" << s_Netmail << ":" << endl;			
 		}
 		else if (parm.s_Token=="silent")
 		{
 			silent=atoi(parm.s_RestOfLine.c_str());
+if (debug) cerr << "silent=" << silent << ":" << endl;			
 		}
 		else if (parm.s_Token=="debug")
 		{
+			if (!debug)
 			debug=atoi(parm.s_RestOfLine.c_str());
+if (debug) cerr << "debug=" << debug << ":" << endl;			
 		}		
 		else if (parm.s_Token=="log")
 		{
 			s_Log=parm.s_RestOfLine;
+if (debug) cerr << "log=" << s_Log << ":" << endl;			
 		}
 		else if (parm.s_Token=="ftncharset")
 		{
       s_CharsetFtn =parm.s_RestOfLine;
+if (debug) cerr << "ftncharset=" << s_CharsetFtn << ":" << endl;			
 		}
 		else if (parm.s_Token=="rfccharset")
 		{
       s_CharsetRfc = parm.s_RestOfLine;
+if (debug) cerr << "rfccharset=" << s_CharsetRfc << ":" << endl;			
 		}
 		else if (parm.s_Token=="outbound")
 		{
 			s_Outbound=parm.s_RestOfLine;
+if (debug) cerr << "outbound=" << s_Outbound << ":" << endl;			
 		}
 		else if (parm.s_Token=="inbound")
 		{
 			s_Inbound=parm.s_RestOfLine;
+if (debug) cerr << "inbound=" << s_Inbound << ":" << endl;			
 		}
 		else if (parm.s_Token=="scandir")
 		{
 			scn++;
 			CScandir scndr(parm.s_RestOfLine);
+if (debug) cerr << "scandir=" << parm.s_RestOfLine << ":" << endl;			
 			S_Scandir.push_back(scndr);
 			if (scn==0) 
 				S_Scandir[scn].firstMask=0;
@@ -190,6 +202,7 @@ CConfig::CConfig()
 		{
 			msk++;
 			COperation op(parm.s_RestOfLine);
+if (debug) cerr << "mask=" << parm.s_RestOfLine << ":" << endl;			
 			O_Op.push_back(op);
 			if (msk==0)
 				O_Op[msk].firstAction=0;
@@ -204,12 +217,14 @@ CConfig::CConfig()
 			actn++;
 			CAction act;
 			act.param=parm.s_RestOfLine;
+if (debug) cerr << "action=" << parm.s_RestOfLine << ":" << endl;			
 			A_Action.push_back(act);
 		}
 		else if (parm.s_Token=="rfc2ftn")
 		{
 			rfcfido++;
 			CAddresslist taddrlist(parm.s_RestOfLine);
+if (debug) cerr << "rfc2ftn=" << parm.s_RestOfLine << ":" << endl;			
 			if (rfcfido==0)
 			  taddrlist.firstAddr = 0;
 			else
@@ -221,5 +236,6 @@ CConfig::CConfig()
 	if (O_Op.size()==1) O_Op[0].lastAction=A_Action.size()-1;
 	S_Scandir[S_Scandir.size()-1].lastMask=O_Op.size()-1;
 	O_Op[O_Op.size()-1].lastAction=A_Action.size()-1;
+if (debug) cerr << "End of Dump " << CONFIGDIR  << endl;			
 	closeConfig();	 
 }
