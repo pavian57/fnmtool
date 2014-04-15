@@ -158,21 +158,9 @@ bool CMask::operator==(const CMask& msk)
 
 bool CMask::checkAttr(string s_Flags,dword attr)
 {
-	bool mand=false;
-  bool result=false;
-	bool _MSGREAD = true;
-  bool _MSGLOCAL = true;
-	bool _MSGPRIVATE = true;
-  bool _MSGCRASH  = true;
-  bool _MSGSENT  = true;
-  bool _MSGFILE = true;
-  bool _MSGFWD  = true;
-
-
-
-
-
-
+  bool mand, result = false;
+  bool _MSGREAD, _MSGLOCAL, _MSGPRIVATE, _MSGCRASH, _MSGSENT, _MSGFILE, _MSGFWD  = true;
+  bool _SGORPHAN, _SGKILL, _SGHOLD, _SGFRQ, _SGSCANNED, _SGXX2, _SGURQ, _SGRRQ, _SGCPT = true;
 
   s_MsgFlags.clear();  
 	for (unsigned int i=0;i<s_Flags.size()-1;i+=2)
@@ -189,7 +177,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGPRIVATE) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+p"; else s_MsgFlags += "-p";
       }
-			_MSGPRIVATE = result;
+      _MSGPRIVATE = result;
     } else if (flag=='c' || flag=='C') { //MSGCRASH
 		  if (mand) {
         if ((attr & MSGCRASH) != 0) result = true; else result = false;
@@ -198,7 +186,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGCRASH) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+c"; else s_MsgFlags += "-c";
       }
-			_MSGCRASH = result;
+      _MSGCRASH = result;
     } else if (flag=='s' || flag=='S') { //MSGSENT
 			if (mand) {
         if ((attr & MSGSENT) != 0) result = true; else result = false;
@@ -207,7 +195,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGSENT) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+s"; else s_MsgFlags += "-s";
       }
-			_MSGSENT = result;
+      _MSGSENT = result;
     } else if (flag=='r' || flag=='R') { //MSGREAD
       if (mand) {
         if ((attr & MSGREAD) != 0) result = true; else result = false;
@@ -216,7 +204,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGREAD) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+r"; else s_MsgFlags += "-r";
       }
-			_MSGREAD = result;
+      _MSGREAD = result;
     } else  if (flag=='a' || flag=='A') { //MSGFILE
       if (mand) {
         if ((attr & MSGFILE) != 0) result = true; else result = false;
@@ -225,7 +213,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGFILE) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+a"; else s_MsgFlags += "-a";
       }    
-			_MSGFILE = result;
+      _MSGFILE = result;
     }else if (flag=='i' || flag=='I') { //MSGFWD
       if (mand) {
         if ((attr & MSGFWD) != 0) result = true; else result = false;
@@ -234,7 +222,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGFWD) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+i"; else s_MsgFlags += "-i";
       }    
-			_MSGFWD = result;
+      _MSGFWD = result;
     } else if (flag=='o' || flag=='O') { //MSGORPHAN
       if (mand) {
         if ((attr & MSGORPHAN) != 0) result = true; else result = false;
@@ -243,14 +231,16 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGORPHAN) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+o"; else s_MsgFlags += "-o";
       }    
-    } if (flag=='k' || flag=='K') {//MSGKILL
+      _MSGORPHAN = result;
+    } else if (flag=='k' || flag=='K') {//MSGKILL
       if (mand) {
         if ((attr & MSGKILL) != 0) result = true; else result = false;
         if (result == true) s_MsgFlags += "+k"; else s_MsgFlags += "-k";
       } else { 
         if ((attr & MSGKILL) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+k"; else s_MsgFlags += "-k";
-      }    
+      }
+      _MSGKILL = result;    
     } else if (flag=='l' || flag=='L') { //MSGLOCAL
       if (mand) {
         if ((attr & MSGLOCAL) != 0) result = true; else result = false;
@@ -259,7 +249,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
 			  if ((attr & MSGLOCAL) == 0) result = true; else result = false;
 			  if (result != true) s_MsgFlags += "+l"; else s_MsgFlags += "-l";
       }
-			_MSGLOCAL = result;
+      _MSGLOCAL = result;
     } else if (flag=='h' || flag=='H') {//MSGHOLD
       if (mand) {
         if ((attr & MSGHOLD) != 0) result = true; else result = false;
@@ -267,7 +257,8 @@ bool CMask::checkAttr(string s_Flags,dword attr)
       } else { 
         if ((attr & MSGHOLD) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+h"; else s_MsgFlags += "-h";
-      }        
+      }
+      _MSGHOLD = result;        
     } else if (flag=='f' || flag=='F') {//MSGFRQ
       if (mand) {
         if ((attr & MSGFRQ) != 0) result = true; else result = false;
@@ -276,6 +267,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGFRQ) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+f"; else s_MsgFlags += "-f";
       }    
+      _MSGFRQ = result;
     } else if (flag=='n' || flag=='N') {//MSGSCANNED
       if (mand) {
         if ((attr & MSGSCANNED) != 0) result = true; else result = false;
@@ -284,6 +276,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGSCANNED) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+n"; else s_MsgFlags += "-n";
       }    
+      _MSGSCANNED = result;
     } else if (flag=='d' || flag=='D') {//MSGXX2
       if (mand) {
         if ((attr & MSGXX2) != 0) result = true; else result = false;
@@ -292,6 +285,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGXX2) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+d"; else s_MsgFlags += "-d";
       }    
+      _MSGXX2 = result;
     } else if (flag=='u' || flag=='U') {//MSGURQ
       if (mand) {
         if ((attr & MSGURQ) != 0) result = true; else result = false;
@@ -300,6 +294,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGURQ) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+u"; else s_MsgFlags += "-u";
       }    
+      _MSGURQ = result;
     } else if (flag=='q' || flag=='Q') {//MSGRRQ
       if (mand) {
         if ((attr & MSGRRQ) != 0) result = true; else result = false;
@@ -308,6 +303,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGRRQ) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+q"; else s_MsgFlags += "-q";
       }    
+      _MSGRRQ = result;
     } else if (flag=='y' || flag=='Y') {//MSGCPT
       if (mand) {
         if ((attr & MSGCPT) != 0) result = true; else result = false;
@@ -316,35 +312,11 @@ bool CMask::checkAttr(string s_Flags,dword attr)
         if ((attr & MSGCPT) == 0) result = true; else result = false;
         if (result != true) s_MsgFlags += "+y"; else s_MsgFlags += "-y";
       }    
-    } else if (flag=='e' || flag=='E') {//; e = KFS (erase)
-    } else if (flag=='m' || flag=='M') {//; m = iMmediate
-    } else if (flag=='t' || flag=='T') {//; t = TFS
-    } else if (flag=='z' || flag=='Z') {//; z = Archive sent
+      _MSGCPT = result;
     }
 	}
-  result = ( _MSGPRIVATE & _MSGCRASH & _MSGREAD & _MSGSENT & _MSGFILE & _MSGLOCAL & _MSGFWD);
-//cerr <<  _MSGPRIVATE  << ":" << _MSGCRASH << ":" <<  _MSGREAD << ":" <<  _MSGSENT << ":" << _MSGFILE << ":" << _MSGLOCAL << endl;
+  result = (_MSGREAD & _MSGLOCAL & _MSGPRIVATE & _MSGCRASH & _MSGSENT & _MSGFILE & _MSGFWD	\
+            _SGORPHAN & _SGKILL & _SGHOLD & _SGFRQ & _SGSCANNED & _SGXX2 & _SGURQ & _SGRRQ & _SGCPT);
 	return result;
 }
-	
-
-/*
-#define MSGPRIVATE 0x0001
-#define MSGCRASH   0x0002
-#define MSGREAD    0x0004
-#define MSGSENT    0x0008
-#define MSGFILE    0x0010
-#define MSGFWD     0x0020     // is also called intransit flag 
-#define MSGORPHAN  0x0040
-#define MSGKILL    0x0080
-#define MSGLOCAL   0x0100
-#define MSGHOLD    0x0200
-#define MSGXX2     0x0400     // you can use this flag as "Direct" attribute 
-#define MSGFRQ     0x0800
-#define MSGRRQ     0x1000
-#define MSGCPT     0x2000
-#define MSGARQ     0x4000
-#define MSGURQ     0x8000
-
-*/
 
