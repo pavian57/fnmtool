@@ -174,49 +174,53 @@ void CFtnAddr::getFromStr(const string& str)
   bool DomDone=false;
   bool fidoAddrOk = false;
 
-	for (unsigned int i=0;i<str.length();i++)
+  string cstr = str;
+  cstr.erase(0, cstr.find_first_not_of(' '));       //prefixing spaces
+  cstr.erase(cstr.find_last_not_of(' ')+1); 
+
+	for (unsigned int i=0;i<cstr.length();i++)
 	{
-    if ((str[i] != ':') & (str[i] != '/') & (str[i] != '.') 
-      & (str[i] != '@') & (str[i] != '*') 
-      & (!isdigit(str[i]))) {
-       cerr << "unknown character >" << string(1,str[i]) << "< in fidonet address " <<str << endl;
-       cout << "unknown character >" << string(1,str[i]) << "< in fidonet address " <<str << endl;
+    if ((cstr[i] != ':') & (cstr[i] != '/') & (cstr[i] != '.') 
+      & (cstr[i] != '@') & (cstr[i] != '*') 
+      & (!isdigit(cstr[i]))) {
+       cerr << "unknown character >" << string(1,cstr[i]) << "< in fidonet address " <<cstr << endl;
+       cout << "unknown character >" << string(1,cstr[i]) << "< in fidonet address " <<cstr << endl;
        exit(255);
      }
   }
 
-	for (unsigned int i=0;i<str.length();i++)
+	for (unsigned int i=0;i<cstr.length();i++)
 	{
-		if (str[i]==':') { ZDone=true; i++; }
-		if (str[i]=='/') { NeDone=true; i++; }
-		if (str[i]=='.' && PDone==false) { NoDone=true; i++; }
-		if (str[i]=='@') { PDone=true; i++; }
+		if (cstr[i]==':') { ZDone=true; i++; }
+		if (cstr[i]=='/') { NeDone=true; i++; }
+		if (cstr[i]=='.' && PDone==false) { NoDone=true; i++; }
+		if (cstr[i]=='@') { PDone=true; i++; }
 		
 		if (!ZDone)
-			Z+=str[i];
+			Z+=cstr[i];
 		else
 		if (!NeDone)
-			Ne+=str[i];
+			Ne+=cstr[i];
 		else
 		if (!NoDone)
-			No+=str[i];
+			No+=cstr[i];
 		else
 		if (!PDone)
-			P+=str[i];
+			P+=cstr[i];
 		else
 		if (!DomDone)
-			Dom+=str[i];
+			Dom+=cstr[i];
 
 	}
   if ((PDone == true) &  (NoDone == true) & (NeDone == true) & (ZDone == true) & (!No.empty()) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
   if ((NoDone == true) & (NeDone == true) & (ZDone == true) & (!No.empty()) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
   if ((NeDone == true) & (ZDone == true) & ((No.empty()) | (No == "*")) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
   if ((ZDone == true) & (ZDone == true) & ((Ne.empty()) | (Ne == "*")) & (No.empty())) fidoAddrOk = true;
-  if (str == "*") fidoAddrOk = true;
+  if (cstr == "*") fidoAddrOk = true;
 
   if (fidoAddrOk == false) {
-    cerr << "Fido Addr >"<< str << "< not correkt, format must be 4D " << endl;
-    cout << "Fido Addr >"<< str << "< not correkt, format must be 4D " << endl;
+    cerr << "Fido Addr >"<< cstr << "< not correkt, format must be 4D " << endl;
+    cout << "Fido Addr >"<< cstr << "< not correkt, format must be 4D " << endl;
     exit(255);
   }
 
