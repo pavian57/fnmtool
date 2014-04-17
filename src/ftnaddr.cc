@@ -166,12 +166,24 @@ bool CFtnAddr::isPoint() const
 	
 void CFtnAddr::getFromStr(const string& str)
 {
-   string Z, Ne, No, P, Dom;
-	bool ZDone=false;
-	bool NeDone=false;
-	bool NoDone=false;
-	bool PDone=false;
-	bool DomDone=false;
+  string Z, Ne, No, P, Dom;
+  bool ZDone=false;
+  bool NeDone=false;
+  bool NoDone=false;
+  bool PDone=false;
+  bool DomDone=false;
+  bool fidoAddrOk = false;
+
+	for (unsigned int i=0;i<str.length();i++)
+	{
+    if ((str[i] != ':') & (str[i] != '/') & (str[i] != '.') 
+      & (str[i] != '@') & (str[i] != '*') 
+      & (!isdigit(str[i]))) {
+       cerr << "unknown character >" << string(1,str[i]) << "< in fidonet address " <<str << endl;
+       cout << "unknown character >" << string(1,str[i]) << "< in fidonet address " <<str << endl;
+       exit(255);
+     }
+  }
 
 	for (unsigned int i=0;i<str.length();i++)
 	{
@@ -196,6 +208,18 @@ void CFtnAddr::getFromStr(const string& str)
 			Dom+=str[i];
 
 	}
+  if ((PDone == true) &  (NoDone == true) & (NeDone == true) & (ZDone == true) & (!No.empty()) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
+  if ((NoDone == true) & (NeDone == true) & (ZDone == true) & (!No.empty()) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
+  if ((NeDone == true) & (ZDone == true) & ((No.empty()) | (No == "*")) & (!Ne.empty()) & (!Z.empty())) fidoAddrOk = true;
+  if ((ZDone == true) & (ZDone == true) & ((Ne.empty()) | (Ne == "*")) & (No.empty())) fidoAddrOk = true;
+  if (str == "*") fidoAddrOk = true;
+
+  if (fidoAddrOk == false) {
+    cerr << "Fido Addr >"<< str << "< not correkt, format must be 4D " << endl;
+    cout << "Fido Addr >"<< str << "< not correkt, format must be 4D " << endl;
+    exit(255);
+  }
+
 	zone=atoi(Z.c_str());
 	net=atoi(Ne.c_str());
 	node=atoi(No.c_str());
