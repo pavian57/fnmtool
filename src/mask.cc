@@ -169,7 +169,7 @@ bool CMask::checkAttr(string s_Flags,dword attr)
 		char prefix, flag;
 		prefix=s_Flags[i];
 		flag=s_Flags[i+1];
-		if (prefix=='+') mand=true;
+		if (prefix=='+') mand=true; else mand=false;
 		if (flag=='p' || flag=='P') { //MSGPRIVATE
 		  if (mand) {
         if ((attr & MSGPRIVATE) != 0) result = true; else result = false;
