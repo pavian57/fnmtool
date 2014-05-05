@@ -47,13 +47,14 @@ CArea::~CArea()
 
 int CArea::Open(string Path)
 {
-    if (Path[0]=='$')
-    {
-        i_type=MSGTYPE_SQUISH;
-        Path.erase(0,1);
-    }
-    else
-        i_type=MSGTYPE_SDM;
+    if (Path[0]=='$') {
+      i_type=MSGTYPE_SQUISH;
+      Path.erase(0,1);
+    } else if (Path[0]=='!') {
+      i_type=MSGTYPE_JAM;
+      Path.erase(0,1);
+    } else
+      i_type=MSGTYPE_SDM;
     
     string logstr="opening area ";
     logstr += Path;
@@ -116,17 +117,17 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
     CMask actualMask;
     int result;
     vector<int> matches;
-    dword msgnum = 0;
+    dword msgnum = MSGNUM_NEXT;
     bool stopwithmsg;
 
     while (MsgGetCurMsg(a_Area) != MsgGetHighMsg(a_Area))
     {
-        result=Message.Open(++msgnum, a_Area);
+        result=Message.Open(msgnum, a_Area);
 //        if (msgnum == 1) msgnum = MSGNUM_NEXT;
 
         if (result==-1)
         {  //get out of here, when no more messages to check
-          if (msgnum > MsgGetHighMsg(a_Area)) return MsgGetCurMsg(a_Area);
+          if (MsgGetCurMsg(a_Area) > MsgGetHighMsg(a_Area)) return MsgGetCurMsg(a_Area);
            continue;
         }
         stopwithmsg = false;

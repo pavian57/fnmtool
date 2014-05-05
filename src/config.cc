@@ -69,13 +69,14 @@ param CConfig::getParam(string line)
 
 CScandir::CScandir(string s_Path)
 {
-	if (s_Path[0]=='$') 
-	{
-		A_Area.i_type=MSGTYPE_SQUISH;
-		s_Path.erase(0,1);
-	}
-	else
-		A_Area.i_type=MSGTYPE_SDM;
+	if (s_Path[0]=='$') {
+    A_Area.i_type=MSGTYPE_SQUISH;
+    s_Path.erase(0,1);
+	}	else if (s_Path[0]=='!') {
+    A_Area.i_type=MSGTYPE_JAM;
+    s_Path.erase(0,1);
+  } else 
+    A_Area.i_type=MSGTYPE_SDM;
 	A_Area.s_Path=s_Path;
 }	
 
