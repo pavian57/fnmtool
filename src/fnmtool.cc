@@ -60,10 +60,10 @@ int main(int argc, char** argv)
 		{
 		if (!cfg->silent)
 		  cerr << "could not open area " << cfg->S_Scandir[i].A_Area.s_Path << endl;
-			string logstr="could not open area ";
+/*			string logstr="could not open area ";
 			logstr+=cfg->S_Scandir[i].A_Area.s_Path;
 			logstr+="!";
-			log->add(3, logstr);
+			log->add(3, logstr); */
 			continue;
 		}
 		else 

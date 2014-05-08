@@ -44,6 +44,8 @@ CAction::~CAction()
 int CFileAction::run()
 {
 	CMsg SrcMsg;
+  stringstream msg ;//create a stringstream
+  msg << msgnum ;
 	SrcMsg.Open(msgnum, Area);
 	f_txtFile=fopen(s_Filename.c_str(), "w");
 	if (f_txtFile != NULL) {
@@ -67,13 +69,13 @@ int CFileAction::run()
     SrcMsg.read = true;
     SrcMsg.WriteAttr();
     SrcMsg.Close();
-    string logstr="Writing Message to File " + s_Filename;
+    string logstr = "Mail #"+msg.str()+" Writing Message to File " + s_Filename;
     if (!cfg->silent) cout << logstr << endl;
     log->add(2,logstr);
     fclose(f_txtFile);
     return 0;
   } else {
-    string logstr="Open File " + s_Filename + " failed!";
+    string logstr = "Mail #"+msg.str()+" Open File " + s_Filename + " failed!";
     log->add(2,logstr);
   }
   return -1;
@@ -82,6 +84,8 @@ int CFileAction::run()
 int CHdrFileAction::run()
 {
     CMsg SrcMsg;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     SrcMsg.Open(msgnum, Area);
     f_txtFile=fopen(s_Filename.c_str(), "w");
     if (f_txtFile != NULL) {
@@ -103,13 +107,13 @@ int CHdrFileAction::run()
       SrcMsg.read = true;
       SrcMsg.WriteAttr();
       SrcMsg.Close();
-      string logstr="Writing Header to File " + s_Filename;
+      string logstr = "Mail #"+msg.str()+" Writing Header to File " + s_Filename;
 			if (!cfg->silent) cout << logstr << endl;
       log->add(2,logstr);
       fclose(f_txtFile);
       return 0;
     } else {
-       string logstr="Open File " + s_Filename + " failed!";
+       string logstr = "Mail #"+msg.str()+" Open File " + s_Filename + " failed!";
     	 log->add(2,logstr);
     }
     return -1;
@@ -119,6 +123,8 @@ int CBounceAction::run()
 {
     CMsg SrcMsg;
     CMsg DestMsg;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     /* open messages */
     SrcMsg.Open(msgnum, Area);
     DestMsg.New(Area);
@@ -170,6 +176,8 @@ int CPingPongAction::run()
 {
     CMsg SrcMsg;
     CMsg DestMsg;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     /* open messages */
     SrcMsg.Open(msgnum, Area);
     DestMsg.New(Area);
@@ -304,7 +312,7 @@ int CPingPongAction::run()
 
     stringstream node;//create a stringstream
     node  << SrcMsg.F_From ;
-    string logstr="PINGRequest: wrote message to=";
+    string logstr = "Mail #"+msg.str()+" PINGRequest: wrote message to=";
     logstr += node.str();
 
     if (!cfg->silent) cout << logstr << endl;
@@ -329,6 +337,8 @@ int CCopyAction::run()
     CMsg SrcMsg;
     CMsg DestMsg;
     destarea=param;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     AArea.Open(destarea);
     SrcMsg.Open(msgnum, Area);
     DestMsg.New(AArea.GetArea());
@@ -342,7 +352,7 @@ int CCopyAction::run()
     DestMsg.d_Attr=SrcMsg.d_Attr;
     DestMsg.sent=true;
     DestMsg.Write();
-    string logstr="Copied Message to Area " + destarea;
+    string logstr = "Mail #"+msg.str()+" Copied Message to Area " + destarea;
     SrcMsg.read = true;
     SrcMsg.WriteAttr();
     if (!cfg->silent) cout << logstr << endl;
@@ -359,6 +369,8 @@ int CMoveAction::run()
     CMsg SrcMsg;
     CMsg DestMsg;
     destarea=param;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     AArea.Open(destarea);
     SrcMsg.Open(msgnum, Area);
     DestMsg.New(AArea.GetArea());
@@ -372,7 +384,7 @@ int CMoveAction::run()
     DestMsg.d_Attr=SrcMsg.d_Attr;
     DestMsg.sent=true;
     DestMsg.Write();
-    string logstr="Moved message to Area " + destarea;
+    string logstr = "Mail #"+msg.str()+" moved message to Area " + destarea;
     if (!cfg->silent) cout << logstr << endl;
     log->add(2, logstr);
     SrcMsg.Delete(Area);
@@ -385,6 +397,8 @@ int CMoveAction::run()
 int CPackmailAction::run()
 {
     CPkt pkt;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     string fromnode, tonode, passwd;
     string temp=param;
     while (temp[0]==' ') temp.erase(0,1);
@@ -431,7 +445,7 @@ int CPackmailAction::run()
             pkt.Message.F_To.zone, pkt.Message.F_To.net, pkt.Message.F_To.node, pkt.Message.F_To.point);
     sprintf(viaaddr, "%i:%i/%i.%i",
             pkt.toNode.zone, pkt.toNode.net, pkt.toNode.node, pkt.toNode.point);
-    string logstr="Packed Message from ";
+    string logstr = "Mail #"+msg.str()+" Packed Message from ";
     logstr+=faddr;
     logstr+=" to ";
     logstr+= taddr;
@@ -448,6 +462,8 @@ int CPackmailAction::run()
 int CMovemailAction::run()
 {
     CPkt pkt;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     string fromnode, tonode, passwd, dir;
     string temp=param;
     while (temp[0]==' ') temp.erase(0,1);
@@ -455,7 +471,7 @@ int CMovemailAction::run()
     {
         if (temp[0]==(*temp.end()))
         {
-            string logstr="Invalid movemail statement! ToNode not specified";
+            string logstr = "Invalid movemail statement! ToNode not specified";
             log->add(5, logstr);
             if (!cfg->silent) cerr << logstr << endl;
             exit(0);
@@ -470,7 +486,7 @@ int CMovemailAction::run()
     {
         if (temp[0]==(*temp.end()))
         {
-            string logstr="Invalid movemail statement! FromNode not specified";
+            string logstr = "Invalid movemail statement! FromNode not specified";
             log->add(5, logstr);
             if (!cfg->silent)  cerr << logstr << endl;
             exit(0);
@@ -485,7 +501,7 @@ int CMovemailAction::run()
     {
         if (temp[0]==(*temp.end()))
         {
-            string logstr="Invalid movemail statement! wrong directory";
+            string logstr = "Invalid movemail statement! wrong directory";
             log->add(5, logstr);
             if (!cfg->silent) cerr << logstr << endl;
             exit(0);
@@ -512,7 +528,7 @@ int CMovemailAction::run()
             pkt.Message.F_To.zone, pkt.Message.F_To.net, pkt.Message.F_To.node, pkt.Message.F_To.point);
     sprintf(viaaddr, "%i:%i/%i.%i",
             pkt.toNode.zone, pkt.toNode.net, pkt.toNode.node, pkt.toNode.point);
-    string logstr="Packed Message from ";
+    string logstr = "Mail #"+msg.str()+" Packed Message from ";
     logstr+=faddr;
     logstr+=" to ";
     logstr+= taddr;
@@ -531,6 +547,8 @@ int CEmailAction::run()
 {
     CMsg Message;
   	CSmtp sendmail;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     string smtpserver, smtpport, mailto;
     string temp=param;
     while (temp[0]==' ') temp.erase(0,1);
@@ -538,7 +556,7 @@ int CEmailAction::run()
     {
         if (temp[0]==(*temp.end()))
         {
-            string logstr="Invalid email statement! smtpserver not specified";
+            string logstr = "Invalid email statement! smtpserver not specified";
             log->add(5, logstr);
             if (!cfg->silent) cerr << logstr << endl;
             exit(0);
@@ -555,7 +573,7 @@ int CEmailAction::run()
     {
         if (temp[0]==(*temp.end()))
         {
-            string logstr="Invalid email statement! smtpport not specified";
+            string logstr = "Invalid email statement! smtpport not specified";
             log->add(5, logstr);
             if (!cfg->silent) cerr << logstr << endl;
             exit(0);
@@ -621,7 +639,7 @@ int CEmailAction::run()
  		int rc = sendmail.sendmail();
 
 		if (rc != 0) {
-    	string logstr="Error__ sending e-mail: ";
+    	string logstr = "Error sending e-mail: ";
 //      logstr += errmsg;
       log->add(5,logstr);
     } else {
@@ -643,6 +661,8 @@ int CRewriteAction::run()
     CMask newMask;
     newMask=param;
     CMsg Message;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     Message.Open(msgnum, Area);
     /* change sender */
     if (newMask.s_Sender[0]!='*')
@@ -673,6 +693,8 @@ int CRewriteAction::run()
 int CDisplayAction::run()
 {
 	CMsg SrcMsg;
+  stringstream msg ;//create a stringstream
+  msg << msgnum ;
 	SrcMsg.Open(msgnum, Area);
   cout << "From   : " << SrcMsg.s_From << "  " << SrcMsg.F_From.zone << ":" << SrcMsg.F_From.net << "/" << SrcMsg.F_From.node << "." << SrcMsg.F_From.point << endl;
   cout << "To     : " << SrcMsg.s_To   << "  " << SrcMsg.F_To.zone << ":" <<  SrcMsg.F_To.net << "/" << SrcMsg.F_To.node<< "." <<  SrcMsg.F_To.point << endl;
@@ -687,7 +709,7 @@ int CDisplayAction::run()
   SrcMsg.read = true;
   SrcMsg.WriteAttr();
   SrcMsg.Close();
-  string logstr="Writing Message to screen";
+  string logstr = "Mail #"+msg.str()+" Writing Message to screen";
 	if (!cfg->silent) cout << logstr << endl;
   log->add(2,logstr);
   return 0;
@@ -695,7 +717,9 @@ int CDisplayAction::run()
 
 int CSemaphoreAction::run()
 {
-	 CMsg SrcMsg;
+  CMsg SrcMsg;
+  stringstream msg ;//create a stringstream
+  msg << msgnum ;
 	f_semFile=fopen(param.c_str(), "w");
   if (f_semFile != NULL) {
   	SrcMsg.Open(msgnum, Area);
@@ -703,13 +727,14 @@ int CSemaphoreAction::run()
     SrcMsg.read = true;
     SrcMsg.WriteAttr();
     SrcMsg.Close();
-    string logstr="Semaphore "+param +" written ";
+
+    string logstr = "Mail #"+msg.str()+" Semaphore "+param +" written ";
 		if (!cfg->silent) cout  << logstr << endl;
     log->add(2,logstr);
     fclose(f_semFile);
     return 0;
   } else {
-    string logstr="Writing Semaphore " + param + " failed!";
+    string logstr = "Mail #"+msg.str()+" Writing Semaphore " + param + " failed!";
     log->add(2,logstr);
   }
   return -1;
@@ -721,6 +746,8 @@ int CSemaphoreAction::run()
    CMsg SrcMsg;
    CMsg DestMsg;
    destarea=param;
+   stringstream msg ;//create a stringstream
+   msg << msgnum ;
    AArea.Open(destarea);
    SrcMsg.Open(msgnum, Area);
    DestMsg.New(AArea.GetArea());
@@ -734,7 +761,7 @@ int CSemaphoreAction::run()
    DestMsg.d_Attr=SrcMsg.d_Attr;
    DestMsg.sent=true;
    DestMsg.Write();
-   string logstr="Copied Message to Area " + destarea;
+   string logstr = "Mail #"+msg.str()+" Copied Message to Area " + destarea;
    log->add(2,logstr);
    DestMsg.Close();
    SrcMsg.Close();
@@ -748,6 +775,8 @@ int CEchoMoveAction::run()
    CMsg SrcMsg;
    CMsg DestMsg;
    destarea=param;
+   stringstream msg ;//create a stringstream
+   msg << msgnum ;
    AArea.Open(destarea);
    SrcMsg.Open(msgnum, Area);
    DestMsg.New(AArea.GetArea());
@@ -761,7 +790,7 @@ int CEchoMoveAction::run()
    DestMsg.d_Attr=SrcMsg.d_Attr;
    DestMsg.sent=true;
    DestMsg.Write();
-   string logstr="Moved message to Area " + destarea;
+   string logstr = "Mail #"+msg.str()+" Moved message to Area " + destarea;
    log->add(2, logstr);
    SrcMsg.Delete(Area);
    SrcMsg.deleted=true;
@@ -773,11 +802,12 @@ int CEchoMoveAction::run()
 int CDeleteAction::run()
 {
     CMsg SrcMsg;
-    char logstr[64];
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     SrcMsg.Open(msgnum, Area);
     SrcMsg.Delete(Area);
     SrcMsg.deleted=true;
-    sprintf(logstr,"Deleted message #%d",msgnum);
+    string logstr = "Mail #"+msg.str()+" message deleted";
     if (!cfg->silent) cout << logstr << endl;
     log->add(2, logstr);
     return 0;
@@ -787,11 +817,11 @@ int CTwitAction::run()
 {
 		CMsg SrcMsg;
     CMsg DestMsg;
+    stringstream msg ;//create a stringstream
+    msg << msgnum ;
     /* open messages */
     SrcMsg.Open(msgnum, Area);
     DestMsg.New(Area);
-    if (cfg->debug) cerr << "CTwitAction, created message" << endl;
-    /* Write Headers */
 
     DestMsg.F_From=SrcMsg.F_To;
     DestMsg.F_To=SrcMsg.F_From;
@@ -803,7 +833,6 @@ int CTwitAction::run()
     DestMsg.d_Attr= MSGLOCAL|MSGPRIVATE|MSGKILL;
 
     string s_Kludges;
-    if (cfg->debug) cerr << "writing kludges" << endl;
     /* write fmpt, topt, intl info */
     char *buf;
     buf = new char[50];
@@ -844,19 +873,12 @@ int CTwitAction::run()
 
     sprintf(buf,"Hello %s.\r\r",SrcMsg.s_From.c_str());
     sprintf(buf+strlen(buf),"Your message has been succesfully ignored and deleted\r\r\r");
-
-    if (cfg->debug) cerr  << "CTwitAction Message=\n" << buf<< endl;
-
     DestMsg.s_MsgText=buf;
-
-    if (cfg->debug) cerr  << "CTwitAction writing messageText" << endl;
     DestMsg.Write();
-
-    //sprintf(buf), " %i:%i/%i.%i", SrcMsg.F_From.zone, SrcMsg.F_From.net, SrcMsg.F_From.node, SrcMsg.F_From.point);
 
     stringstream node;//create a stringstream
     node  << SrcMsg.F_From ;
-    string logstr="CTwitAction wrote message to=";
+    string logstr = "Mail #"+msg.str()+" CTwitAction wrote message to=";
     logstr += node.str();
 
     if (!cfg->silent) cout << logstr << endl;

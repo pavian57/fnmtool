@@ -55,40 +55,42 @@ int CArea::Open(string Path)
       Path.erase(0,1);
     } else
       i_type=MSGTYPE_SDM;
-    
-    string logstr="opening area ";
-    logstr += Path;
-    log->add(1, logstr);
 
+    s_Path = Path;    
+    logmsg="using area ";
+    logmsg += Path;
     a_Area=MsgOpenArea((unsigned char *)Path.c_str(), MSGAREA_CRIFNEC, i_type);
     if (a_Area!=NULL)
     {
         i_msgNum=MsgGetHighMsg(a_Area);
+        logmsg += " open ok";
         return 0;
     }
     else
     {
         a_Area=NULL;
- 
-        string logstr="opening area " + s_Path + " failed";
-        log->add(1, logstr);        
+        logmsg +=" open failed";
+        log->add(1, logmsg);
         return -1;
     }
 }
 
 int CArea::Open()
 {
+    logmsg="using area ";
+    logmsg += s_Path;
     a_Area=MsgOpenArea((unsigned char *)s_Path.c_str(), MSGAREA_NORMAL, i_type);
     if (a_Area!=NULL)
     {
         i_msgNum=MsgGetHighMsg(a_Area);
-        string logstr="opening area " + s_Path;
-        log->add(1, logstr);
+        logmsg += " open ok";
         return 0;
     }
     else
     {
         a_Area=NULL;
+        logmsg +=" open failed";
+        log->add(1, logmsg);
         return -1;
     }
 }
@@ -98,10 +100,14 @@ int CArea::Close()
     if (a_Area!=NULL)
     {
         MsgCloseArea(a_Area);
+        logmsg += " close ok";
+        log->add(1, logmsg);
         return 0;
     }
     else
     {
+        logmsg += " close failed";
+        log->add(1, logmsg);
         return -1;
     }
 }

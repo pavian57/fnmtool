@@ -35,6 +35,7 @@ class CArea
 		~CArea();
 		/* variables */
 		string		s_Path;
+		string  logmsg; 
 		dword		i_msgNum;
 		dword		i_type;
 		protected:
