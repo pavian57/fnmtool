@@ -117,25 +117,20 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
     CMask actualMask;
     int result;
     vector<int> matches;
-    dword msgnum = MSGNUM_NEXT;
+    dword highmsg, msgnum ;
     bool stopwithmsg;
 
-    while (MsgGetCurMsg(a_Area) != MsgGetHighMsg(a_Area))
-    {
+    highmsg =  MsgGetHighMsg(a_Area);
+    for (msgnum=1; msgnum <= highmsg; msgnum++) {
         result=Message.Open(msgnum, a_Area);
-//        if (msgnum == 1) msgnum = MSGNUM_NEXT;
-
-        if (result==-1)
-        {  //get out of here, when no more messages to check
-          if (MsgGetCurMsg(a_Area) > MsgGetHighMsg(a_Area)) return MsgGetCurMsg(a_Area);
+        if (result==-1) { 
            continue;
         }
+
         stopwithmsg = false;
         
         if (cfg->debug) {
-          char number_[6];
-          sprintf(number_, "%lu", MsgGetCurMsg(a_Area));
-          cerr << "New Message = " << number_  << endl;
+          cerr << "New Message = " << msgnum  << endl;
         }
                               
 
@@ -149,7 +144,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                 if (0==1)  // FIX: add searching code...
                     continue;
                 else
-                    matches.push_back(MsgGetCurMsg(a_Area));
+                    matches.push_back(msgnum /*MsgGetCurMsg(a_Area)*/);
 
                 /* TODO: write code to check, if there was already a hit and continue(); if yes */
 
@@ -177,8 +172,8 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
 
 
                     char number[6];
-                    sprintf(number, "%lu", MsgGetCurMsg(a_Area));
-										transform(type.begin(), type.end(), type.begin(), ::tolower);
+                    sprintf(number, "%lu", msgnum); //MsgGetCurMsg(a_Area));
+                    transform(type.begin(), type.end(), type.begin(), ::tolower);
 
                     if (cfg->debug)
                     {
@@ -199,7 +194,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         if (!extension.empty())
                           TempAction.s_Filename +=extension;
 //                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.Area=a_Area;
                         TempAction.run();
                     }
@@ -218,7 +213,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         if (!extension.empty())
                           TempAction.s_Filename +=extension;
 //                        if (M_ScanFor[j].M_Mask.i_match.size()>1) TempAction.s_Filename+=number;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.Area=a_Area;
                         TempAction.run();
                     }
@@ -227,7 +222,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     {
                         CBounceAction TempAction;
                         TempAction.param=RestParam;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.Area=a_Area;
                         TempAction.run();
                     }
@@ -235,7 +230,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     if (type=="ping")
                     {
                         CPingPongAction TempAction;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.Area=a_Area;
                         TempAction.run();
                     }
@@ -245,7 +240,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CCopyAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
                     /*------- action move --------*/
@@ -254,8 +249,10 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CMoveAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
+                        msgnum--;
+                        highmsg--;
                         stopwithmsg = true;
                         break;
                     }
@@ -265,7 +262,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CPackmailAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
                     /*-------- movemail action -------*/
@@ -274,7 +271,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CMovemailAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
 
@@ -285,7 +282,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
                         TempAction.s_Area=s_Path;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
 
@@ -295,7 +292,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CRewriteAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
                     /*--------- display action ----------*/
@@ -304,7 +301,7 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CDisplayAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
 
@@ -314,15 +311,17 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                         CSemaphoreAction TempAction;
                         TempAction.param=RestParam;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
                     }
                     if (type=="delete")
                     {
                         CDeleteAction TempAction;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
+                        msgnum--;
+                        highmsg--;
                         stopwithmsg = true;
                         break;
                     }
@@ -330,8 +329,10 @@ int CArea::Scan(vector<COperation> M_ScanFor, vector<CAction> A_Execute, unsigne
                     {
                         CTwitAction TempAction;
                         TempAction.Area=a_Area;
-                        TempAction.msgnum=MsgGetCurMsg(a_Area);
+                        TempAction.msgnum=msgnum;
                         TempAction.run();
+                        msgnum--;
+                        highmsg--;
                         stopwithmsg = true;
                         break;
                     }

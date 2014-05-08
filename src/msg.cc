@@ -42,7 +42,6 @@ int CMsg::Open(int i_num, HAREA area)
 	hmsg = MsgOpenMsg(area, MOPEN_RW, i_num);
 	if (hmsg==NULL) 
 	{
-		cerr << "could not open message" << endl;
 		return -1;
 	}
 	i_CtrlLen=MsgGetCtrlLen(hmsg);
@@ -185,17 +184,18 @@ CMask CMsg::GetMask()
 
 int CMsg::Close()
 {
-	if (hmsg!=NULL && deleted==false) MsgCloseMsg(hmsg);
-	return 0;
+  int rc;
+	if (hmsg!=NULL && deleted==false) 
+    rc = MsgCloseMsg(hmsg);
+	return rc;
 }
 
 
 int CMsg::Delete(HAREA Area)
 {
 	if (hmsg!=NULL) {
+		MsgCloseMsg(hmsg);
 		MsgKillMsg(Area, i_number);
-/*		MsgCloseMsg(hmsg);
-		MsgKillMsg(Area, i_number);*/
 	}
 	return 0;
 }
